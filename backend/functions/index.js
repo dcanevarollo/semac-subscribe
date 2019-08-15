@@ -22,9 +22,9 @@ const httpServer = express();
 /**
  * Interface de conexão com o banco de dados Mongo.
  */
-mongoose.connect('mongodb://dcanevarollo:j672fb3i@omnistack-shard-00-00-1nrd1.mongodb.net:27017,omnistack-shard-00-' + 
-    '01-1nrd1.mongodb.net:27017,omnistack-shard-00-02-1nrd1.mongodb.net:27017/semac-inscriptions?ssl=true&replicaSet' + 
-    '=OmniStack-shard-0&authSource=admin&retryWrites=true&w=majority', {
+mongoose.connect('mongodb://dcanevarollo:j672fb3i@semaccluster-shard-00-00-iy3lh.mongodb.net:27017,semaccluster-shard' +
+    '-00-01-iy3lh.mongodb.net:27017,semaccluster-shard-00-02-iy3lh.mongodb.net:27017/semac-inscriptions?ssl=true&' + 
+    'replicaSet=SemacCluster-shard-0&authSource=admin&retryWrites=true&w=majority', {
     useNewUrlParser: true
 });
 
