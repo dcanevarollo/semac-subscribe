@@ -24,6 +24,10 @@ export const MainContainer = styled(FlexBox)`
     :hover {
       background-color: #B8015D;
     }
+
+    :focus {
+      outline:0;
+    }
   }
 
   label {
@@ -35,7 +39,7 @@ export const MainContainer = styled(FlexBox)`
 export const RegisterContainer = styled(FlexBox)`
   margin: 50px 0;
   justify-content: space-between;
-  height: 800px;
+  height: 950px;
   width: 1200px;
   border-radius: 20px;
   background-color: #1C1735;
@@ -193,4 +197,103 @@ export const InputContainer = styled(FlexBox)`
   justify-content: flex-start;
   align-items: flex-start;
   margin: 10px 0;
+`;
+
+export const Alert = styled(FlexBox)`
+  align-items: flex-start;
+  flex-direction: column;
+  font-size: 14px;
+  margin: 40px 0 0 0;
+  width: 650px;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.5);
+
+  .title {
+    margin-left: 10px;
+  }
+
+  span {
+    font-weight: 600;
+  }
+
+  p {
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+  div {
+    flex-direction: row;
+  }
+`;
+
+export const CheckboxeContainer = styled(FlexBox)`
+p {
+    margin: 0;
+  }
+`;
+
+export const DialogContainer = styled(FlexBox)`
+  height: 600px;
+  width: 900px;
+  background-color: #1C1735;
+  flex-direction: column;
+`;
+
+export const DialogText = styled(FlexBox)`
+  width: 500px;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-bottom: 25px;
+
+  p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+  }
+`;
+
+export const DialogInputContainer = styled(FlexBox)`
+  align-items: flex-start;
+  flex-direction: column;
+  margin: 10px 0;
+
+  label {
+    margin: 0 0 5px 10px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+`;
+
+export const AdviceContainer = styled.div`
+  width: 500px;
+  margin: 15px 0;
+
+  p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+`;
+
+export const DialogInput = styled(Input)`
+  width: 500px;
+`;
+
+export const ButtonsContainer = styled(FlexBox)`
+  button {
+    margin: 50px 10px 0 10px;
+    height: 32px;
+    width: 120px;
+    background-color: #E20272;
+    border: 0;
+    border-radius: 60px;
+    color:  #FFFF;
+    font-size: 16px;
+    font-weight: 400;
+    transition: 0.3s;
+
+    :hover {
+      background-color: #B8015D;
+    }
+
+    :focus {
+      outline:0;
+    }
 `;
