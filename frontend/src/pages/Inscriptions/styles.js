@@ -8,29 +8,34 @@ const FlexBox = styled.div`
 
 export const MainContainer = styled(FlexBox)`
   background-color: #151128;
-  height: 100%;
 
   button {
     margin-top: 50px;
-    height: 40px;
-    width: 200px;
+    height: 54px;
+    width: 240px;
     background-color: #E20272;
     border: 0;
-    border-radius: 20px;
+    border-radius: 60px;
     color:  #FFFF;
+    font-size: 16px;
     font-weight: 400;
+    transition: 0.3s;
 
     :hover {
-      transition: 0.3s;
       background-color: #B8015D;
     }
+  }
 
+  label {
+    margin: 0 0 2px 5px;
+    color: rgba(255, 255, 255, 0.5);  
   }
 `;
 
 export const RegisterContainer = styled(FlexBox)`
+  margin: 50px 0;
   justify-content: space-between;
-  height: 600px;
+  height: 800px;
   width: 1200px;
   border-radius: 20px;
   background-color: #1C1735;
@@ -84,7 +89,7 @@ export const Form = styled.form`
 `;
 
 export const SpacedContainer = styled(FlexBox)`
-  width: 100%;
+  width: 665px;
   display: flex;
   justify-content: space-between;
 
@@ -95,35 +100,33 @@ export const SpacedContainer = styled(FlexBox)`
     border: 0;
     padding: 10px;
     border-radius: 8px;
-    margin: 10px;
     font-size: 16px;  
     height: 52px;
-    background-color: rgba(0, 0, 0, 0.26);
+    background-color: #151128;
 
-    :hover {
+    :focus {
       outline: none;
+      box-shadow: none;
     }
   }
 `;
 
 const Input = styled.input`
-    height: 32px;
-    border: 0;
-    padding: 10px;
-    border-radius: 8px;
-    color: #FFFF;
-    font-weight: 400;
-    font-size: 16px;
-    margin: 10px;
-    background-color: rgba(0, 0, 0, 0.26);
+  padding-left: 15px;
+  height: 54px;
+  border: 0;
+  border-radius: 8px;
+  color: #FFFF;
+  font-weight: 400;
+  font-size: 16px;
+  background-color: #151128;
 
-    :focus {
-      outline: none;
-    }
+  :focus {
+    outline: none;
+  }
 `;
 
 export const Name = styled(Input)`
-  margin-top: 30px;
   width: 650px;
 `;
 
@@ -144,23 +147,22 @@ export const Text = styled.span`
   color: rgba(255, 255, 255, 0.5);
 `;
 
-export const InscriptionType = styled.select`
-    width: 320px;
-    color: #FFFF;
-    font-weight: 400;
-    border: 0;
-    padding: 10px;
-    border-radius: 8px;
-    margin: 10px;
-    font-size: 16px;  
-    height: 52px;
-    background-color: rgba(0, 0, 0, 0.26);
+export const InlineSelect = styled.select`
+  width: 320px;
+  color: #FFFF;
+  font-weight: 400;
+  border: 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;  
+  height: 52px;
+  background-color: #151128;
 
-    :hover {
-      outline: none;
-    }
-  width: 670px;
-  margin: 10px;
+  :focus {
+    outline: none;
+  }
+  width: 665px;
+  margin: 10 0px;
 `;
 
 export const MiniCourses = styled(FlexBox)`
@@ -184,5 +186,11 @@ export const Options = styled(FlexBox)`
 export const Option = styled(FlexBox)``;
 
 export const CheckBoxes = styled.div`
-  margin-left: 10px;
+`;
+
+export const InputContainer = styled(FlexBox)`
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 10px 0;
 `;

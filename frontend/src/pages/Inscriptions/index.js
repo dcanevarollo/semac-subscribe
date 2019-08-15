@@ -3,6 +3,7 @@ import React, {Fragment} from 'react'
 import {
   MainContainer,
   RegisterContainer,
+  InputContainer,
   LeftSide,
   Rocket,
   RightSide,
@@ -14,14 +15,10 @@ import {
   SwitchContainer,
   Text,
   Options,
-  InscriptionType,
-  MiniCourses,
-  Line,
-  Option
+  InlineSelect
 } from './styles' 
 
 import Switch from '@material-ui/core/Switch';
-import Checkbox from '@material-ui/core/Checkbox';
 
 import rocket from '../../assets/rocket.png'
 
@@ -41,70 +38,66 @@ export default function Inscriptions() {
             <h3>É rapidinho, prometo</h3>
 
             <Form>
-              <Name placeholder="Nome completo" width="500px" />
+              <InputContainer>
+                <label>Nome</label>
+                <Name width="500px" />
+              </InputContainer>
 
               <SpacedContainer>
-                <select>
-                  <option disabled selected>Tamanho de camiseta</option>
-                  <option>P</option>
-                  <option>M</option>
-                  <option>G</option>
-                  <option>GG</option>
-                </select>
+                <InputContainer>
+                  <label>Tamanho de camiseta</label>
+                  <select>
+                    <option disabled selected></option>
+                    <option>PP</option>
+                    <option>P</option>
+                    <option>M</option>
+                    <option>G</option>
+                    <option>GG</option>
+                    <option>Extra GG</option>
+                  </select>
+                </InputContainer>
 
-                <CPF placeholder="CPF" />
+                <InputContainer>
+                  <label>CPF</label>
+                  <CPF />
+                </InputContainer>
               </SpacedContainer>
 
-              <InscriptionType>
-                <option disabled selected>Selecione seu tipo de inscrição</option>
-                <option>Alunos de TI</option>
-                <option>Professores e servidres da UNESP</option>
-                <option>Outros</option>
-              </InscriptionType>
+              <InputContainer>
+                <label>Minicurso 1</label>
+                <InlineSelect>
+                  <option disabled selected></option>
+                  <option>Desenvolvimento de APIs Utilizando SpringBoot - Luiz Roberto Freitas</option>
+                  <option>Análise de Sinais de Áudio Musical - Thiago Fernandes Tavares</option>  
+                </InlineSelect>
+              </InputContainer>
+
+              <InputContainer>
+                <label>Minicurso 2</label>
+                <InlineSelect>
+                  <option disabled selected></option>
+                  <option>Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani</option>
+                  <option>...</option>
+                </InlineSelect>
+              </InputContainer>
 
               <Options>
                 <CheckBoxes>
                   <SwitchContainer>
                     <Switch />
-                    <Text>Vaga de estágio?</Text>
+                    <Text>Você tem interesse em estágio/emprego para 2020?</Text>
                   </SwitchContainer>
 
                   <SwitchContainer>
                     <Switch />
-                    <Text>Maratona de programação?</Text>
+                    <Text>Gostaria de participar da maratona de programação?</Text>
                   </SwitchContainer>
 
                   <SwitchContainer>
                     <Switch />
-                    <Text>Campeonato de jogos?</Text>
+                    <Text>Gostaria de participar do campeonato de jogos?</Text>
                   </SwitchContainer>
-                </CheckBoxes>
-
-                <MiniCourses>
-                  <Line>
-                    <Option>
-                      <Checkbox />
-                      <Text>Minicurso 1</Text>
-                    </Option>
-
-                    <Option>
-                      <Checkbox />
-                      <Text>Minicurso 2</Text>
-                    </Option>
-                  </Line>
-
-                  <Line>
-                    <Option>
-                      <Checkbox />
-                      <Text>Minicurso 3</Text>
-                    </Option>
-
-                    <Option>
-                      <Checkbox />
-                      <Text>Minicurso 4</Text>
-                    </Option>
-                  </Line>
-                </MiniCourses>
+                </CheckBoxes>              
               </Options>
 
               <button type="submit">Cadastrar</button>
