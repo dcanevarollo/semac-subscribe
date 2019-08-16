@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import {Input, Select} from '@rocketseat/unform'
+
 const FlexBox = styled.div`
   display: flex;
   justify-content: center;
@@ -45,6 +47,23 @@ export const RegisterContainer = styled(FlexBox)`
   background-color: #1C1735;
 `;
 
+export const SelectSizes = styled(Select)`
+  width: 310px;
+  color: #FFFF;
+  font-weight: 400;
+  border: 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;  
+  height: 52px;
+  background-color: #151128;
+
+  :focus {
+    outline: none;
+    box-shadow: none;
+  }
+`;
+
 export const LeftSide = styled(FlexBox)`
   flex-direction: column;
   width: 30%;
@@ -84,7 +103,7 @@ export const RightSide = styled(FlexBox)`
   }
 `;
 
-export const Form = styled.form`
+export const FormInternal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,24 +117,11 @@ export const SpacedContainer = styled(FlexBox)`
   justify-content: space-between;
 
   select {
-    width: 310px;
-    color: #FFFF;
-    font-weight: 400;
-    border: 0;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 16px;  
-    height: 52px;
-    background-color: #151128;
-
-    :focus {
-      outline: none;
-      box-shadow: none;
-    }
+    
   }
 `;
 
-const Input = styled.input`
+const InputStyle = styled(Input)`
   padding-left: 15px;
   height: 54px;
   border: 0;
@@ -130,11 +136,11 @@ const Input = styled.input`
   }
 `;
 
-export const Name = styled(Input)`
+export const Name = styled(InputStyle)`
   width: 650px;
 `;
 
-export const CPF = styled(Input)`
+export const CPF = styled(InputStyle)`
   width: 320px;
 `;
 
@@ -151,7 +157,7 @@ export const Text = styled.span`
   color: rgba(255, 255, 255, 0.5);
 `;
 
-export const InlineSelect = styled.select`
+export const InlineSelect = styled(Select)`
   width: 320px;
   color: #FFFF;
   font-weight: 400;
@@ -274,7 +280,7 @@ export const AdviceContainer = styled.div`
   }
 `;
 
-export const DialogInput = styled(Input)`
+export const DialogInput = styled(InputStyle)`
   width: 500px;
 `;
 
