@@ -56,21 +56,6 @@ export default function Inscriptions() {
   const [open, setOpen] = useState(false);
 
   async function handleSubmit() {
-    console.log(name)
-    console.log(size)
-    console.log(cpf)
-    console.log(miniCourse1)
-    console.log(miniCourse2)
-    console.log(inscriptionType)
-    console.log(wantInternship)
-    console.log(marathonDevelopment)
-    console.log(gameChampionship)
-    console.log(readAdvice)
-    console.log(linkedin)
-    console.log(github)
-    console.log(others)
-    console.log(shareLink)
-
     const response = await api.post("/inscription", {
       name,
       cpf,
@@ -87,7 +72,11 @@ export default function Inscriptions() {
   
   function handleClickOpen(e) {
     e.preventDefault();
-    setOpen(true);
+
+    if (wantInternship)
+      setOpen(true);
+    else
+      handleSubmit();
   }
 
   function handleClose() {
