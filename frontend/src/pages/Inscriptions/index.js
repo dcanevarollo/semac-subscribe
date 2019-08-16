@@ -1,12 +1,9 @@
 import React, {Fragment, useState} from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
+import api from '../../services/api'
+
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
+
 import Checkbox from '@material-ui/core/Checkbox';
 
 import {
@@ -41,20 +38,53 @@ import rocket from '../../assets/rocket.png'
 
 export default function Inscriptions() {
 
-  const [documentId, setCPF] = useState("")
+  const [name, setName] = useState("");
+  const [size, setSize] = useState("");
+  const [cpf, setCPF] = useState("");
+  const [miniCourse1, setMiniCourse1] = useState("");
+  const [miniCourse2, setMiniCourse2] = useState("");
+  const [inscriptionType, setInscriptionType] = useState("");
+  const [wantInternship, setWantInternship] = useState(false);
+  const [marathonDevelopment, setMarathonDevelopment] = useState(false);
+  const [gameChampionship, setGameChampionship] = useState(false);
+  const [readAdvice, setReadAdvice] = useState(false);
+  const [linkedin, setLinkedIn] = useState("");
+  const [github, setGitHub] = useState("");
+  const [others, setOthers] = useState("");
+  const [shareLink, setShareLink] = useState(false);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
-  const CheckboxDefault = withStyles({
-    root: {
-      color: 'rgba(255, 255, 255, 0.5)',
-      '&$checked': {
-        color: '#E20272',
-      },
-    },
-    checked: {},
-  })(props => <Checkbox color="default" {...props} />);
+  async function handleSubmit() {
+    console.log(name)
+    console.log(size)
+    console.log(cpf)
+    console.log(miniCourse1)
+    console.log(miniCourse2)
+    console.log(inscriptionType)
+    console.log(wantInternship)
+    console.log(marathonDevelopment)
+    console.log(gameChampionship)
+    console.log(readAdvice)
+    console.log(linkedin)
+    console.log(github)
+    console.log(others)
+    console.log(shareLink)
 
+    const response = await api.post("/inscription", {
+      name,
+      cpf,
+      inscriptionType,
+      tShirtSize: size,
+      wantInternship,
+      wantMarathon: marathonDevelopment,
+      wantGameChampionship: gameChampionship,
+      minicoursesCodes: [miniCourse1, miniCourse2]
+    })
+
+    console.log(response)
+  }
+  
   function handleClickOpen(e) {
     e.preventDefault();
     setOpen(true);
@@ -90,71 +120,71 @@ export default function Inscriptions() {
             <Form>
               <InputContainer>
                 <label>Nome</label>
-                <Name width="500px" />
+                <Name onChange={e => setName(e.target.value)} />
               </InputContainer>
 
               <SpacedContainer>
                 <InputContainer>
                   <label>Tamanho de camiseta</label>
-                  <select>
-                    <option disabled selected></option>
-                    <option>PP</option>
-                    <option>P</option>
-                    <option>M</option>
-                    <option>G</option>
-                    <option>GG</option>
-                    <option>Extra GG</option>
+                  <select onChange={e => setSize(e.target.value)}>
+                    <option disabled selected value=""></option>
+                    <option value="PP">PP</option>
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                    <option value="Extra GG">Extra GG</option>
                   </select>
                 </InputContainer>
 
                 <InputContainer>
                   <label>CPF</label>
-                  <CPF maxLength='14' onChange={e => setCPF(MaskIt(e.target.value))} value={documentId} />
+                  <CPF maxLength='14' onChange={e => setCPF(MaskIt(e.target.value))} value={cpf} />
                 </InputContainer>
               </SpacedContainer>
 
               <InputContainer>
                 <label>Minicurso 1</label>
-                <InlineSelect>
-                  <option disabled selected></option>
-                  <option>Desenvolvimento de APIs Utilizando SpringBoot - Luiz Roberto Freitas</option>
-                  <option>Análise de Sinais de Áudio Musical - Thiago Fernandes Tavares</option>  
+                <InlineSelect onChange={e => setMiniCourse1(e.target.value)} >
+                  <option disabled selected value=""></option>
+                  <option value="1" >Desenvolvimento de APIs Utilizando SpringBoot - Luiz Roberto Freitas</option>
+                  <option value="2">Análise de Sinais de Áudio Musical - Thiago Fernandes Tavares</option>  
                 </InlineSelect>
               </InputContainer>
 
               <InputContainer>
                 <label>Minicurso 2</label>
-                <InlineSelect>
+                <InlineSelect onChange={e => setMiniCourse2(e.target.value)}>
                   <option disabled selected></option>
-                  <option>Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani</option>
-                  <option>...</option>
+                  <option value="3">Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani</option>
+                  <option value="4">...</option>
                 </InlineSelect>
               </InputContainer>
 
               <InputContainer>
                 <label>Tipo de inscrição</label>
-                <InlineSelect>
+                <InlineSelect onChange={e => setInscriptionType(e.target.value)}>
                   <option disabled selected></option>
-                  <option>Alunos de TI</option>
-                  <option>Professor/Servidor da UNESP</option>
-                  <option>Outros</option>
+                  <option value="1">Alunos de TI</option>
+                  <option value="2">Professor/Servidor da UNESP</option>
+                  <option value="3">Outros</option>
                 </InlineSelect>
               </InputContainer>
 
               <Options>
                 <CheckBoxes>
                   <SwitchContainer>
-                    <Switch />
+                    <Switch onChange={e => setWantInternship(!wantInternship)}/>
                     <Text>Você tem interesse em estágio/emprego para 2020?</Text>
                   </SwitchContainer>
 
                   <SwitchContainer>
-                    <Switch />
+                    <Switch onChange={e => setMarathonDevelopment(!marathonDevelopment)} />
                     <Text>Gostaria de participar da maratona de programação?</Text>
                   </SwitchContainer>
 
                   <SwitchContainer>
-                    <Switch />
+                    <Switch onChange={e => setGameChampionship(!gameChampionship)}/>
                     <Text>Gostaria de participar do campeonato de jogos?</Text>
                   </SwitchContainer>
                 </CheckBoxes>              
@@ -165,7 +195,7 @@ export default function Inscriptions() {
                 <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por exemlo, seu comprovante de matrícula ;D </p>
 
                 <CheckboxeContainer>
-                  <CheckboxDefault />
+                  <Checkbox ckbox onChange={e => setReadAdvice(!readAdvice)}  />
                   <p>Li o aviso acima e estou de acordo</p>
                 </CheckboxeContainer>
               
@@ -194,21 +224,21 @@ export default function Inscriptions() {
 
           <DialogInputContainer>
             <label>LinkedIn</label>
-            <DialogInput />
+            <DialogInput onChange={e => setLinkedIn(e.target.value)} value={linkedin}/>
           </DialogInputContainer>
 
           <DialogInputContainer>
             <label>GitHub</label>
-            <DialogInput />
+            <DialogInput onChange={e => setGitHub(e.target.value)} value={github}/>
           </DialogInputContainer>
 
           <DialogInputContainer>
             <label>Outros</label>
-            <DialogInput />
+            <DialogInput onChange={e => setOthers(e.target.value)} value={others}/>
           </DialogInputContainer>
 
           <CheckboxeContainer>
-            <CheckboxDefault />
+            <Checkbox onChange={e => setShareLink(!shareLink)} />
             <AdviceContainer>
               <p>Você concorda que a SEMAC envie esses links junto ao seu nome, para empresas de tecnologia?</p>
             </AdviceContainer>
@@ -216,7 +246,7 @@ export default function Inscriptions() {
 
           <ButtonsContainer>
             <button onClick={handleClose}>Cancelar</button>
-            <button onClick={handleClose}>Confirmar</button>
+            <button onClick={handleSubmit}>Confirmar</button>
           </ButtonsContainer>
 
         </DialogContainer>

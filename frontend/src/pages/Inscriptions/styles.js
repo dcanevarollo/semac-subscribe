@@ -252,6 +252,7 @@ export const DialogText = styled(FlexBox)`
 `;
 
 export const DialogInputContainer = styled(FlexBox)`
+  border-radius: 20px;
   align-items: flex-start;
   flex-direction: column;
   margin: 10px 0;
@@ -267,6 +268,7 @@ export const AdviceContainer = styled.div`
   margin: 15px 0;
 
   p {
+    margin: 5px 0;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.5);
   }
