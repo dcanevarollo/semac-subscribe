@@ -34,10 +34,14 @@ const InscriptionSchema = new Schema({
         type: Boolean,
         required: true
     },
-    minicourses: [{  // Lista de mini-cursos que o usuário escolheu.
+    minicourse1: {
         type: Schema.Types.ObjectId,
         ref: 'Minicourse'
-    }],
+    },
+    minicourse2: {
+        type: Schema.Types.ObjectId,
+        ref: 'Minicourse'
+    },
     /* Campos opcionais, apenas preenchidos caso o usuário opte pelo estágio/vaga de emprego. */
     github: String,
     linkedin: String,

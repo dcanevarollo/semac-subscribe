@@ -23,24 +23,11 @@ module.exports = {
                 message: 'Already registered'
             });
         }
-        
-        /* Retorna um JSON contendo uma mensagem de erro caso os minicursos não sejam enviados. */
-        const { minicoursesCodes } = req.body;
-        if (minicoursesCodes == null) {
-            return res.status(400).json({ 
-                message: 'Codes not received' 
-            });
-        }
 
-        /* Busca os minicursos pelos códigos recebidos e salva seus ids num array de ids. */
-        const minicourses = await Minicourse.find({
-            code: minicoursesCodes
-        });
+        /* Busca os minicursos pelos códigos recebidos e salva seus _ids. */
+        const minicourse1 = await Minicourse.findOne({ code: req.body.minicourse1 });
 
-        let minicoursesIds = [];
-        minicourses.map(minicourse => {
-            minicoursesIds.push(minicourse._id);
-        })
+        const minicourse2 = await Minicourse.findOne({ code: req.body.minicourse2 });
 
         newInscription = Inscription.create({
             name: req.body.name,
@@ -50,7 +37,8 @@ module.exports = {
             wantInternship: req.body.wantInternship,
             wantMarathon: req.body.wantMarathon,
             wantGameChampionship: req.body.wantGameChampionship,
-            minicourses: minicoursesIds,
+            minicourse1: minicourse1,
+            minicourse2: minicourse2,
             github: req.body.github,
             linkedin: req.body.linkedin,
             otherLink: req.body.otherLink
