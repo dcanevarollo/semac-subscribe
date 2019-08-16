@@ -1,14 +1,3 @@
 {
-  "hosting": {
-    "public": "public",
-    "rewrites": [{
-      "source": "/inscription",
-      "function": "httpServer"
-    }],
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+
 }

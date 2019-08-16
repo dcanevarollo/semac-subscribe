@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://semac-inscriptions.web.app"
+  baseURL: "https://us-central1-semac-inscriptions.cloudfunctions.net/httpServer"
 });
 
 export default api;
