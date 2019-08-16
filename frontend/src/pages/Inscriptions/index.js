@@ -48,8 +48,8 @@ export default function Inscriptions() {
   const [marathonDevelopment, setMarathonDevelopment] = useState(false);
   const [gameChampionship, setGameChampionship] = useState(false);
   const [readAdvice, setReadAdvice] = useState(false);
-  const [linkedin, setLinkedIn] = useState("");
   const [github, setGitHub] = useState("");
+  const [linkedin, setLinkedIn] = useState("");
   const [others, setOthers] = useState("");
   const [shareLink, setShareLink] = useState(false);
 
@@ -64,10 +64,15 @@ export default function Inscriptions() {
       wantInternship,
       wantMarathon: marathonDevelopment,
       wantGameChampionship: gameChampionship,
-      minicoursesCodes: [miniCourse1, miniCourse2]
+      minicoursesCodes: [miniCourse1, miniCourse2],
+      github,
+      linkedin,
+      otherLink: others
     })
 
-    console.log(response)
+    // TODO : axibir mensagem de confirmação de inscrição.
+    if (response.success === true)
+      alert("Sucesso!");
   }
   
   function handleClickOpen(e) {

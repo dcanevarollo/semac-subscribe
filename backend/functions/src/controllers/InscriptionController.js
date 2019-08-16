@@ -50,7 +50,10 @@ module.exports = {
             wantInternship: req.body.wantInternship,
             wantMarathon: req.body.wantMarathon,
             wantGameChampionship: req.body.wantGameChampionship,
-            minicourses: minicoursesIds
+            minicourses: minicoursesIds,
+            github: req.body.github,
+            linkedin: req.body.linkedin,
+            otherLink: req.body.otherLink
         });
 
         return res.json({

@@ -37,7 +37,11 @@ const InscriptionSchema = new Schema({
     minicourses: [{  // Lista de mini-cursos que o usuário escolheu.
         type: Schema.Types.ObjectId,
         ref: 'Minicourse'
-    }]
+    }],
+    /* Campos opcionais, apenas preenchidos caso o usuário opte pelo estágio/vaga de emprego. */
+    github: String,
+    linkedin: String,
+    otherLink: String
 }, {
     collection: 'inscriptions',
     timestamps: true  // Carimbo de data e hora da criação da coleção.
