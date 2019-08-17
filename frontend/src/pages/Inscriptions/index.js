@@ -1,13 +1,12 @@
 import React, {Fragment, useState} from 'react'
 
-
 import api from '../../services/api'
 
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Form  } from '@rocketseat/unform'
+import { Form } from '@rocketseat/unform'
 
 import {
   MainContainer,
@@ -92,42 +91,30 @@ export default function Inscriptions() {
     {id: "3", title: "Outros"},
   ]
 
-  
-  
   const [open, setOpen] = useState(false);
   const [cpf, setCPF] = useState("");
   const [personalInfo, setPersonalInfo] = useState({});
   const [responseMessage, setResponseMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false)
 
-  function handleClickOpen(e) {
-    setOpen(true);
-  }
-
-  function handleClose() {
-    setOpen(false);
-  }
-
-  function handleCloseAlert() {
-    setShowAlert(false)
-  }
-
   function MaskIt(value) {
     return value
-      .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
-      .replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
+      /* Substitui qualquer caractere que não seja número por nada. */
+      .replace(/\D/g, '')
+      /* Captura 2 grupos de números: o primeiro de 3 e o segundo de 1. Após capturar o primeiro grupo ele adiciona um
+       ponto antes do segundo grupo de números. */
+      .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-      .replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+      /* Captura 2 números seguidos de um traço e não deixa ser digitado mais nada. */
+      .replace(/(-\d{2})\d+?$/, '$1')
   }
 
   async function handlePersonalSubmit(data) {
-    console.log(wantInternship)
-    if(wantInternship) {
+    if (wantInternship) {
       setPersonalInfo(data);
-      handleClickOpen();
-    }
-    else {
+      setOpen(true);
+    } else {
       const response = await api.post("/inscription", {
         name: data.name,
         cpf: data.cpf,
@@ -144,8 +131,9 @@ export default function Inscriptions() {
         shareLink: shareLink
 
       })
+
       setResponseMessage(response.data.message)
-      displayAlert(); 
+      setShowAlert(true); 
     }
   }
 
@@ -165,163 +153,156 @@ export default function Inscriptions() {
       otherLink: data.others,
       shareLink: shareLink
     })
-    setResponseMessage(response.data.message)
-    displayAlert();
-  }
 
-  function displayAlert() {
-    setShowAlert(true)
+    setResponseMessage(response.data.message)
+    setShowAlert(true);
   }
 
   return (
     <Fragment>
-      
         <MainContainer>
-          
           <RegisterContainer>
             <LeftSide>
-              <Rocket src={rocket}></Rocket>
+              <Rocket src={rocket} />
+
               <h1>Bem vindo!</h1>
-              <p>Agradecemos o interesse pelo evento. Caso ja tenha se cadastrado e deseja acessar sua conta, clique no botão abaixo.</p>
+              <p>Agradecemos o interesse pelo evento. Caso ja tenha se cadastrado e deseja acessar sua conta, clique no 
+                botão abaixo.
+              </p>
             </LeftSide>
 
             <Form onSubmit={handlePersonalSubmit}>
+              <RightSide>
+                <h1>Faça seu cadastro e participe do evento!</h1>
+                <h3>É rapidinho, prometo</h3>
 
-            <RightSide>
-              <h1>Faça seu cadastro e participe do evento!</h1>
-              <h3>É rapidinho, prometo</h3>
-
-              <FormInternal>
-                <InputContainer>
-                  <label>Nome</label>
-                  <Name name="name"/>
-                </InputContainer>
-
-                <SpacedContainer>
+                <FormInternal>
                   <InputContainer>
-                    <label>Tamanho de camiseta</label>
-                    <SelectSizes name="tShirtSize" options={optionsSizes} />
+                    <label>Nome</label>
+                    <Name name="name"/>
+                  </InputContainer>
+
+                  <SpacedContainer>
+                    <InputContainer>
+                      <label>Tamanho de camiseta</label>
+                      <SelectSizes name="tShirtSize" options={optionsSizes} />
+                    </InputContainer>
+
+                    <InputContainer>
+                      <label>CPF</label>
+                      <CPF name="cpf" onChange={e => {setCPF(MaskIt(e.target.value))}} value={cpf}/>
+                    </InputContainer>
+                  </SpacedContainer>
+
+                  <InputContainer>
+                    <label>Minicurso 1</label>
+                    <InlineSelect name="miniCourse1" options={optionsMiniCourse1} />
                   </InputContainer>
 
                   <InputContainer>
-                    <label>CPF</label>
-                    <CPF name="cpf" onChange={e => {setCPF(MaskIt(e.target.value))}} value={cpf}/>
+                    <label>Minicurso 2</label>
+                    <InlineSelect name="miniCourse2" options={optionsMiniCourse2} />
                   </InputContainer>
-                </SpacedContainer>
 
-                <InputContainer>
-                  <label>Minicurso 1</label>
-                  <InlineSelect name="miniCourse1" options={optionsMiniCourse1} />
-                </InputContainer>
+                  <InputContainer>
+                    <label>Tipo de inscrição</label>
+                    <InlineSelect name="inscriptionType" options={typeInscriptionsOptions} />                  
+                  </InputContainer>
 
-                <InputContainer>
-                  <label>Minicurso 2</label>
-                  <InlineSelect name="miniCourse2" options={optionsMiniCourse2} />
-                </InputContainer>
+                  <Options>
+                    <CheckBoxes>
+                      <SwitchContainer>
+                        <Switch onChange={() => wantInternship = !wantInternship} />
+                        <Text>Você tem interesse em estágio/emprego para 2020?</Text>
+                      </SwitchContainer>
 
-                <InputContainer>
-                  <label>Tipo de inscrição</label>
-                  <InlineSelect name="inscriptionType" options={typeInscriptionsOptions} />                  
-                </InputContainer>
+                      <SwitchContainer>
+                        <Switch onChange={() => wantMarathon = !wantMarathon} />
+                        <Text>Gostaria de participar da maratona de programação?</Text>
+                      </SwitchContainer>
 
-                <Options>
-                  <CheckBoxes>
-                    <SwitchContainer>
-                      <Switch onChange={function teste(e) {wantInternship = !wantInternship; console.log(wantInternship)}} />
-                      <Text>Você tem interesse em estágio/emprego para 2020?</Text>
-                    </SwitchContainer>
+                      <SwitchContainer>
+                        <Switch onChange={() => wantGameChampionship = !wantGameChampionship}/>
+                        <Text>Gostaria de participar do campeonato de jogos?</Text>
+                      </SwitchContainer>
+                    </CheckBoxes>              
+                  </Options>
 
-                    <SwitchContainer>
-                      <Switch onChange={e => wantMarathon = !wantMarathon} />
-                      <Text>Gostaria de participar da maratona de programação?</Text>
-                    </SwitchContainer>
+                  <AlertText>
+                    <span className="title">Atenção!</span>
+                    <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por 
+                      exemlo, seu comprovante de matrícula ;D 
+                    </p>
 
-                    <SwitchContainer>
-                      <Switch onChange={e => wantGameChampionship = !wantGameChampionship}/>
-                      <Text>Gostaria de participar do campeonato de jogos?</Text>
-                    </SwitchContainer>
-                  </CheckBoxes>              
-                </Options>
+                    <CheckboxeContainer>
+                      <Checkbox onChange={() => readAdvice = !readAdvice} />
+                      <p>Li o aviso acima e estou de acordo</p>
+                    </CheckboxeContainer>
+                  </AlertText>
 
-                <AlertText>
-                  <span className="title">Atenção!</span>
-                  <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por exemlo, seu comprovante de matrícula ;D </p>
-
-                  <CheckboxeContainer>
-                    <Checkbox onChange={e => readAdvice = !readAdvice}  />
-                    <p>Li o aviso acima e estou de acordo</p>
-                  </CheckboxeContainer>
-                
-                </AlertText>
-
-                <button type="submit" >Cadastrar</button>
-              </FormInternal>
-            </RightSide>
-
+                  <button type="submit">Cadastrar</button>
+                </FormInternal>
+              </RightSide>
             </Form>
           </RegisterContainer>
 
           <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth="900px"
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="900px"
           >
-          <DialogContainer>
-            <Form onSubmit={handleJobSubmit}>
+            <DialogContainer>
+              <Form onSubmit={handleJobSubmit}>
 
-              <DialogText>
-                <p>Notei que você tem interesse em estágio ou emprego.</p>
-                <p>Para chegar lá, conte-me mais sobre você:</p>
-              </DialogText>
+                <DialogText>
+                  <p>Notei que você tem interesse em estágio ou emprego.</p>
+                  <p>Para chegar lá, conte-me mais sobre você:</p>
+                </DialogText>
 
-              <DialogInputContainer>
-                <label>LinkedIn</label>
-                <DialogInput name="linkedin" />
-              </DialogInputContainer>
+                <DialogInputContainer>
+                  <label>LinkedIn</label>
+                  <DialogInput name="linkedin" />
+                </DialogInputContainer>
 
-              <DialogInputContainer>
-                <label>GitHub</label>
-                <DialogInput name="github" />
-              </DialogInputContainer>
+                <DialogInputContainer>
+                  <label>GitHub</label>
+                  <DialogInput name="github" />
+                </DialogInputContainer>
 
-              <DialogInputContainer>
-                <label>Outros</label>
-                <DialogInput name="others" />
-              </DialogInputContainer>
+                <DialogInputContainer>
+                  <label>Outros</label>
+                  <DialogInput name="others" />
+                </DialogInputContainer>
 
-              <CheckboxeContainer>
-                <Checkbox onChange={e => shareLink = !shareLink} />
-                <AdviceContainer>
-                  <p>Você concorda que a SEMAC envie esses links junto ao seu nome, para empresas de tecnologia?</p>
-                </AdviceContainer>
-              </CheckboxeContainer>
+                <CheckboxeContainer>
+                  <Checkbox onChange={() => shareLink = !shareLink} />
+
+                  <AdviceContainer>
+                    <p>Você concorda que a SEMAC envie esses links, junto ao seu nome, para empresas de tecnologia?</p>
+                  </AdviceContainer>
+                </CheckboxeContainer>
+
+                <ButtonsContainer>
+                  <button onClick={() => setOpen(false)}>Cancelar</button>
+                  <button type="submit">Confirmar</button>
+                </ButtonsContainer>
+              </Form>
+            </DialogContainer>
+          </Dialog>
+
+          <CssTextField open={showAlert} onClose={() => setShowAlert(false)}>
+            <AlertMessageContainer>
+              <h1>{responseMessage}</h1>
 
               <ButtonsContainer>
-                <button onClick={handleClose}>Cancelar</button>
-                <button type="submit">Confirmar</button>
+                <button onClick={() => setShowAlert(false)}>Voltar</button>
               </ButtonsContainer>
-
-            </Form> 
-          </DialogContainer>
-        </Dialog>
-
-        <CssTextField
-        open={showAlert}
-        onClose={handleClose}
-        >
-          <AlertMessageContainer>
-            <h1>{responseMessage}</h1>
-
-            <ButtonsContainer>
-              <button onClick={handleCloseAlert}>Voltar</button>
-            </ButtonsContainer>
-
-          </AlertMessageContainer>
-        </CssTextField>
-          
+            </AlertMessageContainer>
+          </CssTextField>
         </MainContainer>
     </Fragment>
   );
+  
 }
