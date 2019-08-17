@@ -5,6 +5,7 @@ import api from '../../services/api'
 
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles';
 
 import { Form  } from '@rocketseat/unform'
 
@@ -26,20 +27,45 @@ import {
   Options,
   InlineSelect,
   CheckboxeContainer,
-  Alert,
+  AlertText,
   DialogContainer,
   DialogInputContainer,
   DialogInput,
   AdviceContainer,
   DialogText,
-  ButtonsContainer
+  ButtonsContainer,
+  AlertMessageContainer
 } from './styles' 
 
 import Switch from '@material-ui/core/Switch';
 
 import rocket from '../../assets/rocket.png'
 
+let wantInternship = false;
+let wantMarathon = false;
+let wantGameChampionship = false;
+let readAdvice = false;
+let shareLink = false;
+
 export default function Inscriptions() {
+
+  const CssTextField = withStyles({
+    root: {
+      '& .MuiDialog-paper': {
+        borderRadius: 20,
+        backgroundColor: "transparent"
+      },
+      '& .MuiDialog-paperScrollPaper': {
+        borderRadius: 20,
+      },
+      '& .MuiPaper-rounded': {
+        borderRadius: 20,
+      },
+      '& .MuiDialog-paperWidthSm': {
+        borderRadius: 20,
+      }
+    },
+  })(Dialog);
 
   const optionsSizes = [
     {id: "PP", title: "PP" },
@@ -66,22 +92,24 @@ export default function Inscriptions() {
     {id: "3", title: "Outros"},
   ]
 
-  let wantInternship = false;
-  let wantMarathon = false;
-  let wantGameChampionship = false;
-  let readAdvice = false;
-  let shareLink = false;
+  
   
   const [open, setOpen] = useState(false);
   const [cpf, setCPF] = useState("");
   const [personalInfo, setPersonalInfo] = useState({});
-  
+  const [responseMessage, setResponseMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false)
+
   function handleClickOpen(e) {
     setOpen(true);
   }
 
   function handleClose() {
     setOpen(false);
+  }
+
+  function handleCloseAlert() {
+    setShowAlert(false)
   }
 
   function MaskIt(value) {
@@ -94,12 +122,13 @@ export default function Inscriptions() {
   }
 
   async function handlePersonalSubmit(data) {
+    console.log(wantInternship)
     if(wantInternship) {
       setPersonalInfo(data);
       handleClickOpen();
     }
     else {
-      await api.post("/inscription", {
+      const response = await api.post("/inscription", {
         name: data.name,
         cpf: data.cpf,
         inscriptionType: data.inscriptionType,
@@ -112,12 +141,16 @@ export default function Inscriptions() {
         github: "",
         linkedin: "",
         otherLink: "",
+        shareLink: shareLink
+
       })
+      setResponseMessage(response.data.message)
+      displayAlert(); 
     }
   }
 
   async function handleJobSubmit(data) {
-    await api.post("/inscription", {
+    const response = await api.post("/inscription", {
       name: personalInfo.name,
       cpf: personalInfo.cpf,
       inscriptionType: personalInfo.inscriptionType,
@@ -130,7 +163,14 @@ export default function Inscriptions() {
       github: data.github,
       linkedin: data.linkedin,
       otherLink: data.others,
+      shareLink: shareLink
     })
+    setResponseMessage(response.data.message)
+    displayAlert();
+  }
+
+  function displayAlert() {
+    setShowAlert(true)
   }
 
   return (
@@ -187,7 +227,7 @@ export default function Inscriptions() {
                 <Options>
                   <CheckBoxes>
                     <SwitchContainer>
-                      <Switch onChange={e => wantInternship = !wantInternship}/>
+                      <Switch onChange={function teste(e) {wantInternship = !wantInternship; console.log(wantInternship)}} />
                       <Text>Você tem interesse em estágio/emprego para 2020?</Text>
                     </SwitchContainer>
 
@@ -203,7 +243,7 @@ export default function Inscriptions() {
                   </CheckBoxes>              
                 </Options>
 
-                <Alert>
+                <AlertText>
                   <span className="title">Atenção!</span>
                   <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por exemlo, seu comprovante de matrícula ;D </p>
 
@@ -212,9 +252,9 @@ export default function Inscriptions() {
                     <p>Li o aviso acima e estou de acordo</p>
                   </CheckboxeContainer>
                 
-                </Alert>
+                </AlertText>
 
-                <button type="submit">Cadastrar</button>
+                <button type="submit" >Cadastrar</button>
               </FormInternal>
             </RightSide>
 
@@ -263,9 +303,23 @@ export default function Inscriptions() {
                 <button type="submit">Confirmar</button>
               </ButtonsContainer>
 
-            </Form>
+            </Form> 
           </DialogContainer>
         </Dialog>
+
+        <CssTextField
+        open={showAlert}
+        onClose={handleClose}
+        >
+          <AlertMessageContainer>
+            <h1>{responseMessage}</h1>
+
+            <ButtonsContainer>
+              <button onClick={handleCloseAlert}>Voltar</button>
+            </ButtonsContainer>
+
+          </AlertMessageContainer>
+        </CssTextField>
           
         </MainContainer>
     </Fragment>

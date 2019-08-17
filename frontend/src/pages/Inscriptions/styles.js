@@ -205,7 +205,7 @@ export const InputContainer = styled(FlexBox)`
   margin: 10px 0;
 `;
 
-export const Alert = styled(FlexBox)`
+export const AlertText = styled(FlexBox)`
   align-items: flex-start;
   flex-direction: column;
   font-size: 14px;
@@ -297,11 +297,29 @@ export const ButtonsContainer = styled(FlexBox)`
     font-weight: 400;
     transition: 0.3s;
 
-    :hover {
-      background-color: #B8015D;
-    }
+      :hover {
+        background-color: #B8015D;
+      }
 
-    :focus {
-      outline:0;
-    }
+      :focus {
+        outline:0;
+      }
+  }
+`;
+
+export const AlertMessageContainer = styled(FlexBox)`
+  flex-direction: column;
+  width: 500px;
+  height: 150px;
+  background-color: #151128;
+
+  h1 {
+    font-size: 16px;
+    color: #FFF;
+  }
+
+  button {
+    margin-top: 20px;
+    font-size: 14px;
+  }
 `;
