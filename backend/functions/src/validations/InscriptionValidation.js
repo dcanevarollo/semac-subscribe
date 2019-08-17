@@ -86,19 +86,19 @@ module.exports = {
             || inscription.shareLink == null 
             || inscription.minicourse1 == "" 
             || inscription.minicourse2 == "") {
-            return 'The request have some blank fields'        
+            return 'Por favor, preencha todos os campos obrigatórios.'        
         }
 
         /* Valida o formato do CPF. */
         const cpfPattern = new RegExp("([0-9]{2}\.[0-9]{3}\.[0-9]{3}[\/]?[0-9]{4}-[0-9]{2})|" + 
             "([0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2})", "g")
         if (!cpfPattern.test(inscription.cpf)) {
-            return 'Invalid CPF format'
+            return 'Por favor, forneça um CPF no formato XXX.XXX.XXX-XX.'
         }
 
         /* Verifica a veracidade do CPF. */
         if (!this.validCPF(inscription.cpf)) {
-            return 'Invalid CPF'
+            return 'Por favor, forneça um CPF válido.'
         }
 
         return '';

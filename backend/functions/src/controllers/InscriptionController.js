@@ -21,15 +21,15 @@ module.exports = {
         /* Se a inscrição já foi feita, retorna uma mensagem. */
         let newInscription = await Inscription.findOne({ cpf: req.body.cpf });
         if (newInscription != null) {
-            return res.status(400).json({
-                message: 'Already registered'
+            return res.json({
+                message: 'CPF já cadastrado.'
             });
         }
 
         /* Faz a validação do formulário e retorna um JSON de erro, se houver. */
         const errorMessage = InscriptionValidation.validate(req.body);
         if (errorMessage !== '') {
-            return res.status(400).json({
+            return res.json({
                 message: errorMessage
             });
         }
@@ -55,8 +55,8 @@ module.exports = {
             otherLink: req.body.otherLink
         });
 
-        return res.status(200).json({
-            message: 'Inscription successfully registered'
+        return res.json({
+            message: 'Inscrição efetuada com sucesso!'
         });
     }
 
