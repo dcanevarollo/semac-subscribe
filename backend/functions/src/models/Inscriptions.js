@@ -22,15 +22,19 @@ const InscriptionSchema = new Schema({
         type: String,
         required: true
     },
-    wantInternship: {
+    wantInternship: {  // Quer estágio ou vaga de emprego.
         type: Boolean,
         required: true
     },
-    wantMarathon: {
+    wantMarathon: {  // Quer participar da maratona de programação.
         type: Boolean,
         required: true
     },
-    wantGameChampionship: {
+    wantGameChampionship: {  // Quer participar do campeonato de jogos.
+        type: Boolean,
+        required: true
+    },
+    shareLink: {  // Permite o compartilhamento de seus dados.
         type: Boolean,
         required: true
     },
