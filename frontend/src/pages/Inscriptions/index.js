@@ -5,7 +5,7 @@ import api from '../../services/api'
 
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 import { Form  } from '@rocketseat/unform'
 
@@ -67,6 +67,16 @@ export default function Inscriptions() {
     },
   })(Dialog);
 
+  const styledCheckbox = makeStyles({
+    root: {
+      color: "rgba(255, 255, 255, 0.5)",
+      '&$checked': {
+        color: "#B8015D",
+      },
+    }
+  })
+  const classes = styledCheckbox();
+
   const optionsSizes = [
     {id: "PP", title: "PP" },
     {id: "P", title: "P"},
@@ -92,8 +102,6 @@ export default function Inscriptions() {
     {id: "3", title: "Outros"},
   ]
 
-  
-  
   const [open, setOpen] = useState(false);
   const [cpf, setCPF] = useState("");
   const [personalInfo, setPersonalInfo] = useState({});
@@ -122,7 +130,6 @@ export default function Inscriptions() {
   }
 
   async function handlePersonalSubmit(data) {
-    console.log(wantInternship)
     if(wantInternship) {
       setPersonalInfo(data);
       handleClickOpen();
@@ -248,7 +255,7 @@ export default function Inscriptions() {
                   <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por exemlo, seu comprovante de matrícula ;D </p>
 
                   <CheckboxeContainer>
-                    <Checkbox onChange={e => readAdvice = !readAdvice}  />
+                    <Checkbox className={classes.root} onChange={e => readAdvice = !readAdvice}  />
                     <p>Li o aviso acima e estou de acordo</p>
                   </CheckboxeContainer>
                 
@@ -292,7 +299,7 @@ export default function Inscriptions() {
               </DialogInputContainer>
 
               <CheckboxeContainer>
-                <Checkbox onChange={e => shareLink = !shareLink} />
+                <Checkbox className={classes.root} onChange={e => shareLink = !shareLink} />
                 <AdviceContainer>
                   <p>Você concorda que a SEMAC envie esses links junto ao seu nome, para empresas de tecnologia?</p>
                 </AdviceContainer>

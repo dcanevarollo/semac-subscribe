@@ -25,6 +25,7 @@ export const MainContainer = styled(FlexBox)`
 
     :hover {
       background-color: #B8015D;
+      cursor: pointer;
     }
 
     :focus {
@@ -293,12 +294,14 @@ export const ButtonsContainer = styled(FlexBox)`
     border: 0;
     border-radius: 60px;
     color:  #FFFF;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     transition: 0.3s;
 
       :hover {
         background-color: #B8015D;
+        cursor: pointer;
+        
       }
 
       :focus {
