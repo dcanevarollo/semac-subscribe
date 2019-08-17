@@ -4,7 +4,7 @@ import api from '../../services/api'
 
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 import { Form } from '@rocketseat/unform'
 
@@ -65,6 +65,16 @@ export default function Inscriptions() {
       }
     },
   })(Dialog);
+
+  const styledCheckbox = makeStyles({
+    root: {
+      color: "rgba(255, 255, 255, 0.5)",
+      '&$checked': {
+        color: "#B8015D",
+      },
+    }
+  })
+  const classes = styledCheckbox();
 
   const optionsSizes = [
     {id: "PP", title: "PP" },
