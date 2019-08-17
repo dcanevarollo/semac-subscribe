@@ -66,16 +66,17 @@ export default function Inscriptions() {
     {id: "3", title: "Outros"},
   ]
 
-  const [open, setOpen] = useState(false);
-
   let wantInternship = false;
   let wantMarathon = false;
   let wantGameChampionship = false;
   let readAdvice = false;
   let shareLink = false;
   
+  const [open, setOpen] = useState(false);
+  const [cpf, setCPF] = useState("");
+  const [personalInfo, setPersonalInfo] = useState({});
+  
   function handleClickOpen(e) {
-    e.preventDefault();
     setOpen(true);
   }
 
@@ -92,15 +93,49 @@ export default function Inscriptions() {
       .replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
   }
 
-  function handleSubmit(data) {
-    console.log("Entrei aqui")
-    console.log(data)
-    console.log(wantInternship,  wantMarathon, wantGameChampionship, readAdvice, shareLink)
+  async function handlePersonalSubmit(data) {
+    if(wantInternship) {
+      setPersonalInfo(data);
+      handleClickOpen();
+    }
+    else {
+      await api.post("/inscription", {
+        name: data.name,
+        cpf: data.cpf,
+        inscriptionType: data.inscriptionType,
+        tShirtSize: data.tShirtSize,
+        wantInternship: wantInternship,
+        wantMarathon: wantMarathon,
+        wantGameChampionship: wantGameChampionship,
+        minicourse1: data.miniCourse1,
+        minicourse2: data.miniCourse2,
+        github: "",
+        linkedin: "",
+        otherLink: "",
+      })
+    }
+  }
+
+  async function handleJobSubmit(data) {
+    await api.post("/inscription", {
+      name: personalInfo.name,
+      cpf: personalInfo.cpf,
+      inscriptionType: personalInfo.inscriptionType,
+      tShirtSize: personalInfo.tShirtSize,
+      wantInternship: wantInternship,
+      wantMarathon: wantMarathon,
+      wantGameChampionship: wantGameChampionship,
+      minicourse1: personalInfo.miniCourse1,
+      minicourse2: personalInfo.miniCourse2,
+      github: data.github,
+      linkedin: data.linkedin,
+      otherLink: data.others,
+    })
   }
 
   return (
     <Fragment>
-      <Form onSubmit={handleSubmit}>
+      
         <MainContainer>
           
           <RegisterContainer>
@@ -110,6 +145,8 @@ export default function Inscriptions() {
               <p>Agradecemos o interesse pelo evento. Caso ja tenha se cadastrado e deseja acessar sua conta, clique no botão abaixo.</p>
             </LeftSide>
 
+            <Form onSubmit={handlePersonalSubmit}>
+
             <RightSide>
               <h1>Faça seu cadastro e participe do evento!</h1>
               <h3>É rapidinho, prometo</h3>
@@ -117,7 +154,7 @@ export default function Inscriptions() {
               <FormInternal>
                 <InputContainer>
                   <label>Nome</label>
-                  <Name name="nome"/>
+                  <Name name="name"/>
                 </InputContainer>
 
                 <SpacedContainer>
@@ -128,7 +165,7 @@ export default function Inscriptions() {
 
                   <InputContainer>
                     <label>CPF</label>
-                    <CPF name="cpf" />
+                    <CPF name="cpf" onChange={e => {setCPF(MaskIt(e.target.value))}} value={cpf}/>
                   </InputContainer>
                 </SpacedContainer>
 
@@ -144,7 +181,7 @@ export default function Inscriptions() {
 
                 <InputContainer>
                   <label>Tipo de inscrição</label>
-                  <InlineSelect name="typeInscription" options={typeInscriptionsOptions} />                  
+                  <InlineSelect name="inscriptionType" options={typeInscriptionsOptions} />                  
                 </InputContainer>
 
                 <Options>
@@ -177,9 +214,11 @@ export default function Inscriptions() {
                 
                 </Alert>
 
-                <button onClick={e => handleClickOpen(e)}>Cadastrar</button>
+                <button type="submit">Cadastrar</button>
               </FormInternal>
             </RightSide>
+
+            </Form>
           </RegisterContainer>
 
           <Dialog
@@ -187,47 +226,48 @@ export default function Inscriptions() {
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          maxWidth={900}
-        >
+          maxWidth="900px"
+          >
           <DialogContainer>
+            <Form onSubmit={handleJobSubmit}>
 
-            <DialogText>
-              <p>Notei que você tem interesse em estágio ou emprego.</p>
-              <p>Para chegar lá, conte-me mais sobre você:</p>
-            </DialogText>
+              <DialogText>
+                <p>Notei que você tem interesse em estágio ou emprego.</p>
+                <p>Para chegar lá, conte-me mais sobre você:</p>
+              </DialogText>
 
-            <DialogInputContainer>
-              <label>LinkedIn</label>
-              <DialogInput name="linkedin" />
-            </DialogInputContainer>
+              <DialogInputContainer>
+                <label>LinkedIn</label>
+                <DialogInput name="linkedin" />
+              </DialogInputContainer>
 
-            <DialogInputContainer>
-              <label>GitHub</label>
-              <DialogInput name="github" />
-            </DialogInputContainer>
+              <DialogInputContainer>
+                <label>GitHub</label>
+                <DialogInput name="github" />
+              </DialogInputContainer>
 
-            <DialogInputContainer>
-              <label>Outros</label>
-              <DialogInput name="others" />
-            </DialogInputContainer>
+              <DialogInputContainer>
+                <label>Outros</label>
+                <DialogInput name="others" />
+              </DialogInputContainer>
 
-            <CheckboxeContainer>
-              <Checkbox onChange={e => shareLink = !shareLink} />
-              <AdviceContainer>
-                <p>Você concorda que a SEMAC envie esses links junto ao seu nome, para empresas de tecnologia?</p>
-              </AdviceContainer>
-            </CheckboxeContainer>
+              <CheckboxeContainer>
+                <Checkbox onChange={e => shareLink = !shareLink} />
+                <AdviceContainer>
+                  <p>Você concorda que a SEMAC envie esses links junto ao seu nome, para empresas de tecnologia?</p>
+                </AdviceContainer>
+              </CheckboxeContainer>
 
-            <ButtonsContainer>
-              <button onClick={handleClose}>Cancelar</button>
-              <button type="submit">Confirmar</button>
-            </ButtonsContainer>
+              <ButtonsContainer>
+                <button onClick={handleClose}>Cancelar</button>
+                <button type="submit">Confirmar</button>
+              </ButtonsContainer>
 
+            </Form>
           </DialogContainer>
         </Dialog>
           
         </MainContainer>
-      </Form>
     </Fragment>
   );
 }
