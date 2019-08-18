@@ -81,6 +81,10 @@ export const LeftSide = styled(FlexBox)`
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
   }
+
+  span {
+    color: #E20272;
+  }
 `;
 
 export const Rocket = styled.img`
@@ -116,10 +120,6 @@ export const SpacedContainer = styled(FlexBox)`
   width: 665px;
   display: flex;
   justify-content: space-between;
-
-  select {
-    
-  }
 `;
 
 const InputStyle = styled(Input)`
@@ -204,6 +204,12 @@ export const InputContainer = styled(FlexBox)`
   justify-content: flex-start;
   align-items: flex-start;
   margin: 10px 0;
+
+  label::after {
+    content: "*";
+    margin-left: 4px;
+    color: #E20272;
+  }
 `;
 
 export const AlertText = styled(FlexBox)`
@@ -301,7 +307,6 @@ export const ButtonsContainer = styled(FlexBox)`
       :hover {
         background-color: #B8015D;
         cursor: pointer;
-        
       }
 
       :focus {

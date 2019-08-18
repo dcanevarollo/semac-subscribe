@@ -4,7 +4,7 @@ import api from '../../services/api'
 
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { Form } from '@rocketseat/unform'
 
@@ -48,7 +48,7 @@ let shareLink = false;
 
 export default function Inscriptions() {
 
-  const CssTextField = withStyles({
+  const AlertBox = withStyles({
     root: {
       '& .MuiDialog-paper': {
         borderRadius: 20,
@@ -65,16 +65,6 @@ export default function Inscriptions() {
       }
     },
   })(Dialog);
-
-  const styledCheckbox = makeStyles({
-    root: {
-      color: "rgba(255, 255, 255, 0.5)",
-      '&$checked': {
-        color: "#B8015D",
-      },
-    }
-  })
-  const classes = styledCheckbox();
 
   const optionsSizes = [
     {id: "PP", title: "PP" },
@@ -101,9 +91,8 @@ export default function Inscriptions() {
     {id: "3", title: "Outros"},
   ]
 
-  const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [cpf, setCPF] = useState("");
-  const [personalInfo, setPersonalInfo] = useState({});
   const [responseMessage, setResponseMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false)
 
@@ -120,11 +109,12 @@ export default function Inscriptions() {
       .replace(/(-\d{2})\d+?$/, '$1')
   }
 
-  async function handlePersonalSubmit(data) {
-    if (wantInternship) {
-      setPersonalInfo(data);
-      setOpen(true);
+  async function handleSubmit(data) {
+    if (!openDialog && wantInternship) {
+      setOpenDialog(true);
     } else {
+      setOpenDialog(false);
+
       const response = await api.post("/inscription", {
         name: data.name,
         cpf: data.cpf,
@@ -133,55 +123,36 @@ export default function Inscriptions() {
         wantInternship: wantInternship,
         wantMarathon: wantMarathon,
         wantGameChampionship: wantGameChampionship,
+        shareLink: shareLink,
         minicourse1: data.miniCourse1,
         minicourse2: data.miniCourse2,
-        github: "",
-        linkedin: "",
-        otherLink: "",
-        shareLink: shareLink
-
+        github: data.github !== undefined ? data.github : "",
+        linkedin: data.linkedin !== undefined ? data.linkedin : "",
+        otherLink: data.others !== undefined ? data.others : ""
       })
 
-      setResponseMessage(response.data.message)
-      setShowAlert(true); 
+      setResponseMessage(response.data.message);
+      setShowAlert(true);
     }
-  }
-
-  async function handleJobSubmit(data) {
-    const response = await api.post("/inscription", {
-      name: personalInfo.name,
-      cpf: personalInfo.cpf,
-      inscriptionType: personalInfo.inscriptionType,
-      tShirtSize: personalInfo.tShirtSize,
-      wantInternship: wantInternship,
-      wantMarathon: wantMarathon,
-      wantGameChampionship: wantGameChampionship,
-      minicourse1: personalInfo.miniCourse1,
-      minicourse2: personalInfo.miniCourse2,
-      github: data.github,
-      linkedin: data.linkedin,
-      otherLink: data.others,
-      shareLink: shareLink
-    })
-
-    setResponseMessage(response.data.message)
-    setShowAlert(true);
   }
 
   return (
     <Fragment>
         <MainContainer>
-          <RegisterContainer>
-            <LeftSide>
-              <Rocket src={rocket} />
+          <Form id="main-form" onSubmit={handleSubmit}>
+            <RegisterContainer>
+              <LeftSide>
+                <Rocket src={rocket} />
 
-              <h1>Bem vindo!</h1>
-              <p>Agradecemos o interesse pelo evento. Caso ja tenha se cadastrado e deseja acessar sua conta, clique no 
-                botão abaixo.
-              </p>
-            </LeftSide>
+                <h1>Bem vindo!</h1>
+                <p>
+                  Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos ao lado.
+                  <br/><br/>
+                  <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
+                </p>
+              </LeftSide>
 
-            <Form onSubmit={handlePersonalSubmit}>
+              
               <RightSide>
                 <h1>Faça seu cadastro e participe do evento!</h1>
                 <h3>É rapidinho, prometo</h3>
@@ -241,7 +212,7 @@ export default function Inscriptions() {
                   <AlertText>
                     <span className="title">Atenção!</span>
                     <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por 
-                      exemlo, seu comprovante de matrícula ;D 
+                      exemlo, seu comprovante de matrícula. ;D 
                     </p>
 
                     <CheckboxeContainer>
@@ -253,19 +224,17 @@ export default function Inscriptions() {
                   <button type="submit">Cadastrar</button>
                 </FormInternal>
               </RightSide>
-            </Form>
-          </RegisterContainer>
+              
+            </RegisterContainer>
 
-          <Dialog
-            open={open}
-            onClose={() => setOpen(false)}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            maxWidth="900px"
-          >
-            <DialogContainer>
-              <Form onSubmit={handleJobSubmit}>
-
+            <Dialog
+              open={openDialog}
+              onClose={() => setOpenDialog(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth="900px"
+            >
+              <DialogContainer>
                 <DialogText>
                   <p>Notei que você tem interesse em estágio ou emprego.</p>
                   <p>Para chegar lá, conte-me mais sobre você:</p>
@@ -295,14 +264,14 @@ export default function Inscriptions() {
                 </CheckboxeContainer>
 
                 <ButtonsContainer>
-                  <button onClick={() => setOpen(false)}>Cancelar</button>
-                  <button type="submit">Confirmar</button>
+                  <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
+                  <button type="submit" form="main-form">Confirmar</button>
                 </ButtonsContainer>
-              </Form>
-            </DialogContainer>
-          </Dialog>
+              </DialogContainer>
+            </Dialog>
+          </Form>
 
-          <CssTextField open={showAlert} onClose={() => setShowAlert(false)}>
+          <AlertBox open={showAlert} onClose={() => setShowAlert(false)}>
             <AlertMessageContainer>
               <h1>{responseMessage}</h1>
 
@@ -310,7 +279,7 @@ export default function Inscriptions() {
                 <button onClick={() => setShowAlert(false)}>Voltar</button>
               </ButtonsContainer>
             </AlertMessageContainer>
-          </CssTextField>
+          </AlertBox>
         </MainContainer>
     </Fragment>
   );
