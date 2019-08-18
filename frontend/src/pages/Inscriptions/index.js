@@ -198,7 +198,7 @@ export default function Inscriptions() {
 
               <h1>Bem vindo!</h1>
               <p>
-                Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos ao lado.
+                Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos do formuário.
                 <br/><br/>
                 <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
                 <br/><br/>
