@@ -1,3 +1,8 @@
+/**
+ * @author Douglas Brandão
+ * 
+ * Componente de estilização global do app.
+ */
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`

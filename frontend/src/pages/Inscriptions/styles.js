@@ -6,6 +6,11 @@ const FlexBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    flex-direction: column;
+  }
 `;
 
 export const MainContainer = styled(FlexBox)`
@@ -40,12 +45,25 @@ export const MainContainer = styled(FlexBox)`
 `;
 
 export const RegisterContainer = styled(FlexBox)`
+  display: flex;
   margin: 50px 0;
   justify-content: space-between;
   height: 950px;
   width: 1200px;
   border-radius: 20px;
   background-color: #1C1735;
+
+  @media screen and (max-width: 800px) {
+    margin: 10px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 90%;
+    padding: 16px;
+    width: 100%;
+    max-width: 350px;
+  }
 `;
 
 export const SelectSizes = styled(Select)`
@@ -63,11 +81,18 @@ export const SelectSizes = styled(Select)`
     outline: none;
     box-shadow: none;
   }
+
+  @media screen and (max-width: 800px) {
+    flex: 1;
+    width: 100%;
+    max-width: 350px;
+    padding: 15px 0 15px 10px;
+  }
 `;
 
 export const LeftSide = styled(FlexBox)`
   flex-direction: column;
-  width: 30%;
+  flex: 1;
   margin-left: 50px;
 
   h1 {
@@ -85,6 +110,19 @@ export const LeftSide = styled(FlexBox)`
   span {
     color: #E20272;
   }
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    margin: 0;
+
+    h1 {
+      margin: 7px;
+    }
+
+    p {
+      max-width: 400px;
+    }
+  }
 `;
 
 export const Rocket = styled.img`
@@ -92,8 +130,9 @@ export const Rocket = styled.img`
 `;
 
 export const RightSide = styled(FlexBox)`
-  width: 85%;
   flex-direction: column;
+  flex: 2;
+
   h1 {
     margin: 5px;
     font-weight: "bold";
@@ -106,24 +145,38 @@ export const RightSide = styled(FlexBox)`
     font-size: 16px;
     color: #FFFF;
   }
+
+  @media screen and (max-width: 800px) {
+    flex: 1;
+    width: 100%;
+
+    h1 {
+      width: 100;
+      margin-top: 24px;
+      text-align: center;
+    }
+  }
 `;
 
 export const FormInternal = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  margin: 10px;  
 `;
 
 export const SpacedContainer = styled(FlexBox)`
   width: 665px;
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 const InputStyle = styled(Input)`
-  padding-left: 15px;
   height: 54px;
   border: 0;
   border-radius: 8px;
@@ -135,20 +188,45 @@ const InputStyle = styled(Input)`
   :focus {
     outline: none;
   }
+
+  @media screen and (max-width: 800px) {
+    flex: 1;
+    width: 100%;
+    max-width: 350px; 
+    padding: 15px 0 15px 10px;
+  }
 `;
 
 export const Name = styled(InputStyle)`
   width: 650px;
+  padding-left: 10px;
+
+  @media screen and (max-width: 800px) {
+    width: 350px;
+    padding-left: 0 !important;
+  }
 `;
 
 export const CPF = styled(InputStyle)`
   width: 320px;
+  padding-left: 10px;
+
+  @media screen and (max-width: 800px) {
+    width: 350px;
+    padding-left: 0 !important;
+  }
 `;
 
 export const SwitchContainer = styled(FlexBox)`
   width: 100%;
   justify-content: flex-start;
   align-items: center;
+
+  @media screen and (max-width: 800px) {
+    justify-content: flex-end;
+    align-items: start;
+    margin-bottom: 5px;
+  }
 `;
 
 export const Text = styled.span`
@@ -159,11 +237,12 @@ export const Text = styled.span`
 `;
 
 export const InlineSelect = styled(Select)`
-  width: 320px;
+  width: 665px;
   color: #FFFF;
   font-weight: 400;
   border: 0;
-  padding: 10px;
+  padding: 16px;
+  margin: 10 0px;
   border-radius: 8px;
   font-size: 16px;  
   height: 52px;
@@ -172,8 +251,12 @@ export const InlineSelect = styled(Select)`
   :focus {
     outline: none;
   }
-  width: 665px;
-  margin: 10 0px;
+
+  @media screen and (max-width: 800px) {
+    flex: 1;
+    width: 100%;
+    max-width: 350px;
+  }
 `;
 
 export const MiniCourses = styled(FlexBox)`
@@ -181,6 +264,15 @@ export const MiniCourses = styled(FlexBox)`
   justify-content: space-between;
   width: 350px;
   flex-direction: column;
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    max-width: 350px;
+
+    option {
+      overflow: hidden;
+    }
+  }
 `;
 
 export const Line = styled(FlexBox)`
@@ -193,8 +285,6 @@ export const Options = styled(FlexBox)`
   width: 100%;
   justify-content: space-between;
 `;
-
-export const Option = styled(FlexBox)``;
 
 export const CheckBoxes = styled.div`
 `;
@@ -209,6 +299,13 @@ export const InputContainer = styled(FlexBox)`
     content: "*";
     margin-left: 4px;
     color: #E20272;
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    max-width: 400px;
+    justify-content: center,
+    align-items: center;
   }
 `;
 
@@ -239,9 +336,20 @@ export const AlertText = styled(FlexBox)`
   }
 `;
 
-export const CheckboxeContainer = styled(FlexBox)`
-p {
-    margin: 0;
+export const CheckboxContainer = styled(FlexBox)`
+  @media screen and (min-width: 801px) {
+    p {
+      margin: 0;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    justify-content: flex-start;
+    align-items: start;
+
+    p {
+      margin-left: 0;
+    }
   }
 `;
 
@@ -284,6 +392,12 @@ export const AdviceContainer = styled.div`
     margin: 5px 0;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    max-width: 400px;
+    margin: 0;
   }
 `;
 
@@ -330,4 +444,8 @@ export const AlertMessageContainer = styled(FlexBox)`
     margin-top: 20px;
     font-size: 14px;
   }
+`;
+
+export const PayPalSection = styled.section`
+  display: none;
 `;

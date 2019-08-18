@@ -1,4 +1,9 @@
-import React, {Fragment, useState} from 'react'
+/**
+ * @author Douglas Brandão
+ * 
+ * Componente de visualização da tela de inscrição.
+ */
+import React, { Fragment, useState } from 'react'
 
 import api from '../../services/api'
 
@@ -25,7 +30,7 @@ import {
   Text,
   Options,
   InlineSelect,
-  CheckboxeContainer,
+  CheckboxContainer,
   AlertText,
   DialogContainer,
   DialogInputContainer,
@@ -33,13 +38,15 @@ import {
   AdviceContainer,
   DialogText,
   ButtonsContainer,
-  AlertMessageContainer
+  AlertMessageContainer,
+  PayPalSection
 } from './styles' 
 
 import Switch from '@material-ui/core/Switch';
 
 import rocket from '../../assets/rocket.png'
 
+/* Variáveis booleanas que o usuário poderá manipular. */
 let wantInternship = false;
 let wantMarathon = false;
 let wantGameChampionship = false;
@@ -48,6 +55,9 @@ let shareLink = false;
 
 export default function Inscriptions() {
 
+  /**
+   * Caixa de alerta dinâmica.
+   */
   const AlertBox = withStyles({
     root: {
       '& .MuiDialog-paper': {
@@ -86,9 +96,9 @@ export default function Inscriptions() {
   ]
 
   const typeInscriptionsOptions = [
-    {id: "1", title: "Alunos de TI"},
-    {id: "2", title: "Professor/Servidor da UNESP"},
-    {id: "3", title: "Outros"},
+    {id: "Alunos de TI", title: "Alunos de TI - R$80,00"},
+    {id: "Professores e Servidores", title: "Professor/Servidor da UNESP - R$90,00"},
+    {id: "Demais", title: "Demais - R$100,00"},
   ]
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -96,8 +106,14 @@ export default function Inscriptions() {
   const [responseMessage, setResponseMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false)
 
-  function MaskIt(value) {
-    return value
+  /**
+   * Aplica a máscara do campo de CPF.
+   * 
+   * @param {String} cpf : texto que será mascarado.
+   * @returns CPF no formato XXX.XXX.XXX-XX.
+   */
+  function maskCpf(cpf) {
+    return cpf
       /* Substitui qualquer caractere que não seja número por nada. */
       .replace(/\D/g, '')
       /* Captura 2 grupos de números: o primeiro de 3 e o segundo de 1. Após capturar o primeiro grupo ele adiciona um
@@ -109,178 +125,256 @@ export default function Inscriptions() {
       .replace(/(-\d{2})\d+?$/, '$1')
   }
 
+  /**
+   * Seleciona, no select do formulário de redirecionamento do PayPal, o tipo de inscrição do usuário.
+   * 
+   * @param {Object} data : dados retornados do formulário.
+   */
+  function selectPayPalValue(data) {
+    if (data.inscriptionType === "Alunos de TI") {
+      document.getElementById('opt-ti-student').selected = true;
+    } else if (data.inscriptionType === "Professores e Servidores") {
+      document.getElementById('opt-professors-servers').selected = true;
+    } else {
+      document.getElementById('opt-others').selected = true;
+    }
+  }
+
+  /**
+   * Cuida da lógica responsável pelo evento de submit do formulário de cadastro.
+   * 
+   * @param {Object} data : dados retornados do formulário. 
+   */
   async function handleSubmit(data) {
+    /* Se o dialog de informações extras (GitHub, LinkedIn...) não está aberto e o usuário quer emprego ou vaga de está-
+    gio, o dialog em questão deve então ser aberto. */
     if (!openDialog && wantInternship) {
       setOpenDialog(true);
     } else {
       setOpenDialog(false);
 
-      const response = await api.post("/inscription", {
-        name: data.name,
-        cpf: data.cpf,
-        inscriptionType: data.inscriptionType,
-        tShirtSize: data.tShirtSize,
-        wantInternship: wantInternship,
-        wantMarathon: wantMarathon,
-        wantGameChampionship: wantGameChampionship,
-        shareLink: shareLink,
-        minicourse1: data.miniCourse1,
-        minicourse2: data.miniCourse2,
-        github: data.github !== undefined ? data.github : "",
-        linkedin: data.linkedin !== undefined ? data.linkedin : "",
-        otherLink: data.others !== undefined ? data.others : ""
-      })
+      /* Envia o formulário a API apenas se o usuário selecionou o checkbox de aviso obrigatório. */
+      if (readAdvice) {
+        const response = await api.post("/inscription", {
+          name: data.name,
+          cpf: data.cpf,
+          inscriptionType: data.inscriptionType,
+          tShirtSize: data.tShirtSize,
+          wantInternship: wantInternship,
+          wantMarathon: wantMarathon,
+          wantGameChampionship: wantGameChampionship,
+          shareLink: shareLink,
+          minicourse1: data.miniCourse1,
+          minicourse2: data.miniCourse2,
+          github: data.github !== undefined ? data.github : "",
+          linkedin: data.linkedin !== undefined ? data.linkedin : "",
+          otherLink: data.others !== undefined ? data.others : ""
+        })
 
-      setResponseMessage(response.data.message);
-      setShowAlert(true);
+        setResponseMessage(response.data.message);
+        setShowAlert(true);
+
+        /* Se obteve sucesso, redireciona para a página de pagamento do PayPal após 1.5s. */
+        if (response.data.message.search("sucesso") !== -1) {
+          setTimeout(() => {
+            selectPayPalValue(data);
+            document.getElementById('paypal-form').submit();
+          }, 1500);
+        }
+      } else {
+        setResponseMessage("Confirme que você leu o aviso antes de se cadastrar!");
+        setShowAlert(true);
+      }
     }
   }
 
   return (
     <Fragment>
-        <MainContainer>
-          <Form id="main-form" onSubmit={handleSubmit}>
-            <RegisterContainer>
-              <LeftSide>
-                <Rocket src={rocket} />
+      <MainContainer>
+        <Form id="main-form" onSubmit={handleSubmit}>
+          <RegisterContainer>
+            <LeftSide>
+              <Rocket src={rocket} />
 
-                <h1>Bem vindo!</h1>
-                <p>
-                  Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos ao lado.
-                  <br/><br/>
-                  <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
-                </p>
-              </LeftSide>
+              <h1>Bem vindo!</h1>
+              <p>
+                Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos ao lado.
+                <br/><br/>
+                <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
+                <br/><br/>
+                Após completar seu cadastro, você será redirecionado para a tela de pagamento do 
+                <strong> PayPal</strong>.
+              </p>
+            </LeftSide>
 
-              
-              <RightSide>
-                <h1>Faça seu cadastro e participe do evento!</h1>
-                <h3>É rapidinho, prometo</h3>
+            <RightSide>
+              <h1>Faça seu cadastro e participe do evento!</h1>
+              <h3>É rapidinho, prometo</h3>
 
-                <FormInternal>
+              <FormInternal>
+                <InputContainer>
+                  <label>Nome</label>
+                  <Name name="name"/>
+                </InputContainer>
+
+                <SpacedContainer>
                   <InputContainer>
-                    <label>Nome</label>
-                    <Name name="name"/>
-                  </InputContainer>
-
-                  <SpacedContainer>
-                    <InputContainer>
-                      <label>Tamanho de camiseta</label>
-                      <SelectSizes name="tShirtSize" options={optionsSizes} />
-                    </InputContainer>
-
-                    <InputContainer>
-                      <label>CPF</label>
-                      <CPF name="cpf" onChange={e => {setCPF(MaskIt(e.target.value))}} value={cpf}/>
-                    </InputContainer>
-                  </SpacedContainer>
-
-                  <InputContainer>
-                    <label>Minicurso 1</label>
-                    <InlineSelect name="miniCourse1" options={optionsMiniCourse1} />
+                    <label>Tamanho de camiseta</label>
+                    <SelectSizes name="tShirtSize" options={optionsSizes} />
                   </InputContainer>
 
                   <InputContainer>
-                    <label>Minicurso 2</label>
-                    <InlineSelect name="miniCourse2" options={optionsMiniCourse2} />
+                    <label>CPF</label>
+                    <CPF name="cpf" onChange={e => {setCPF(maskCpf(e.target.value))}} value={cpf}/>
                   </InputContainer>
+                </SpacedContainer>
 
-                  <InputContainer>
-                    <label>Tipo de inscrição</label>
-                    <InlineSelect name="inscriptionType" options={typeInscriptionsOptions} />                  
-                  </InputContainer>
+                <InputContainer>
+                  <label>Minicurso 1</label>
+                  <InlineSelect name="miniCourse1" options={optionsMiniCourse1} />
+                </InputContainer>
 
-                  <Options>
-                    <CheckBoxes>
-                      <SwitchContainer>
-                        <Switch onChange={() => wantInternship = !wantInternship} />
-                        <Text>Você tem interesse em estágio/emprego para 2020?</Text>
-                      </SwitchContainer>
+                <InputContainer>
+                  <label>Minicurso 2</label>
+                  <InlineSelect name="miniCourse2" options={optionsMiniCourse2} />
+                </InputContainer>
 
-                      <SwitchContainer>
-                        <Switch onChange={() => wantMarathon = !wantMarathon} />
-                        <Text>Gostaria de participar da maratona de programação?</Text>
-                      </SwitchContainer>
+                <InputContainer>
+                  <label>Tipo de inscrição</label>
+                  <InlineSelect name="inscriptionType" options={typeInscriptionsOptions} />                  
+                </InputContainer>
 
-                      <SwitchContainer>
-                        <Switch onChange={() => wantGameChampionship = !wantGameChampionship}/>
-                        <Text>Gostaria de participar do campeonato de jogos?</Text>
-                      </SwitchContainer>
-                    </CheckBoxes>              
-                  </Options>
+                <Options>
+                  <CheckBoxes>
+                    <SwitchContainer>
+                      <Switch onChange={() => wantInternship = !wantInternship} />
+                      <Text>Você tem interesse em estágio/emprego para 2020?</Text>
+                    </SwitchContainer>
 
-                  <AlertText>
-                    <span className="title">Atenção!</span>
-                    <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por 
-                      exemlo, seu comprovante de matrícula. ;D 
-                    </p>
+                    <SwitchContainer>
+                      <Switch onChange={() => wantMarathon = !wantMarathon} />
+                      <Text>Gostaria de participar da maratona de programação?</Text>
+                    </SwitchContainer>
 
-                    <CheckboxeContainer>
-                      <Checkbox onChange={() => readAdvice = !readAdvice} />
-                      <p>Li o aviso acima e estou de acordo</p>
-                    </CheckboxeContainer>
-                  </AlertText>
+                    <SwitchContainer>
+                      <Switch onChange={() => wantGameChampionship = !wantGameChampionship}/>
+                      <Text>Gostaria de participar do campeonato de jogos?</Text>
+                    </SwitchContainer>
+                  </CheckBoxes>              
+                </Options>
 
-                  <button type="submit">Cadastrar</button>
-                </FormInternal>
-              </RightSide>
-              
-            </RegisterContainer>
+                <AlertText>
+                  <span className="title">Atenção!</span>
+                  <p> Alunos de TI, lembrem-se de levar um documento que comprove que você é aluno da área, como por 
+                    exemlo, seu comprovante de matrícula. ;D 
+                  </p>
 
-            <Dialog
-              open={openDialog}
-              onClose={() => setOpenDialog(false)}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              maxWidth="900px"
-            >
-              <DialogContainer>
-                <DialogText>
-                  <p>Notei que você tem interesse em estágio ou emprego.</p>
-                  <p>Para chegar lá, conte-me mais sobre você:</p>
-                </DialogText>
+                  <CheckboxContainer>
+                    <Checkbox onChange={() => readAdvice = !readAdvice} />
+                    <p>Li o aviso acima e estou de acordo</p>
+                  </CheckboxContainer>
+                </AlertText>
 
-                <DialogInputContainer>
-                  <label>LinkedIn</label>
-                  <DialogInput name="linkedin" />
-                </DialogInputContainer>
+                <button type="submit">Cadastrar</button>
+              </FormInternal>
+            </RightSide>
+          </RegisterContainer>
 
-                <DialogInputContainer>
-                  <label>GitHub</label>
-                  <DialogInput name="github" />
-                </DialogInputContainer>
+          <Dialog
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="900px"
+          >
+            <DialogContainer>
+              <DialogText>
+                <p>Notei que você tem interesse em estágio ou emprego.</p>
+                <p>Para chegar lá, conte-me mais sobre você:</p>
+              </DialogText>
 
-                <DialogInputContainer>
-                  <label>Outros</label>
-                  <DialogInput name="others" />
-                </DialogInputContainer>
+              <DialogInputContainer>
+                <label>LinkedIn</label>
+                <DialogInput name="linkedin" />
+              </DialogInputContainer>
 
-                <CheckboxeContainer>
-                  <Checkbox onChange={() => shareLink = !shareLink} />
+              <DialogInputContainer>
+                <label>GitHub</label>
+                <DialogInput name="github" />
+              </DialogInputContainer>
 
-                  <AdviceContainer>
-                    <p>Você concorda que a SEMAC envie esses links, junto ao seu nome, para empresas de tecnologia?</p>
-                  </AdviceContainer>
-                </CheckboxeContainer>
+              <DialogInputContainer>
+                <label>Outros</label>
+                <DialogInput name="others" />
+              </DialogInputContainer>
 
-                <ButtonsContainer>
-                  <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
-                  <button type="submit" form="main-form">Confirmar</button>
-                </ButtonsContainer>
-              </DialogContainer>
-            </Dialog>
-          </Form>
+              <CheckboxContainer>
+                <Checkbox onChange={() => shareLink = !shareLink} />
 
-          <AlertBox open={showAlert} onClose={() => setShowAlert(false)}>
-            <AlertMessageContainer>
-              <h1>{responseMessage}</h1>
+                <AdviceContainer>
+                  <p>Você concorda que a SEMAC envie esses links, junto ao seu nome, para empresas de tecnologia?</p>
+                </AdviceContainer>
+              </CheckboxContainer>
 
               <ButtonsContainer>
-                <button onClick={() => setShowAlert(false)}>Voltar</button>
+                <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
+                <button type="submit" form="main-form">Confirmar</button>
               </ButtonsContainer>
-            </AlertMessageContainer>
-          </AlertBox>
-        </MainContainer>
+            </DialogContainer>
+          </Dialog>
+        </Form>
+
+        <AlertBox open={showAlert} onClose={() => setShowAlert(false)}>
+          <AlertMessageContainer>
+            <h1>{responseMessage}</h1>
+
+            <ButtonsContainer>
+              <button onClick={() => setShowAlert(false)}>Voltar</button>
+            </ButtonsContainer>
+          </AlertMessageContainer>
+        </AlertBox>
+
+        {/* Formulário escondido que o PayPal utiliza para redirecionamento. */}
+        <PayPalSection>
+          <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="POST" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick" />
+            <input type="hidden" name="hosted_button_id" value="4BP4AQDNW68Z6" />
+
+            <table>
+              <tbody>
+                <tr>
+                  <td><input type="hidden" name="on0" value="SEMAC 2019" /></td>
+                </tr>
+                
+                <tr>
+                  <td>
+                    <select name="os0">
+                      <option id="opt-ti-student" value="Alunos de TI" />
+                      <option id="opt-professors-servers" value="Professores e Servidores" />
+                      <option id="opt-others" value="Demais" />
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <input type="hidden" name="currency_code" value="BRL" />
+            <input 
+              type="image" 
+              src="https://www.paypalobjects.com/pt_BR/BR/i/btn/btn_buynowCC_LG.gif" 
+              border="0" 
+              name="submit" 
+              alt="PayPal - A maneira fácil e segura de enviar pagamentos online!"
+            />
+            <img alt="" 
+              border="0" 
+              src="https://www.paypalobjects.com/pt_BR/i/scr/pixel.gif" 
+              width="1" 
+              height="1" 
+            />
+          </form>
+        </PayPalSection>
+      </MainContainer>
     </Fragment>
   );
   

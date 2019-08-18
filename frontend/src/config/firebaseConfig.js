@@ -1,3 +1,8 @@
+/**
+ * @author Douglas Canevarollo
+ * 
+ * Componente de configuração do Firebase Hosting.
+ */
 import firebase from 'firebase/app';
 
 const config = {

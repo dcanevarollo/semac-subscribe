@@ -1,3 +1,8 @@
+/**
+ * @author Douglas Brandão
+ * 
+ * Componente de entrada da aplicação web.
+ */
 import React, {Fragment} from "react";
 
 import GlobalStyle from './styles/globals'
