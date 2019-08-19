@@ -56,7 +56,7 @@ module.exports = {
         });
 
         return res.json({
-            message: 'Inscrição efetuada com sucesso!'
+            message: 'Sucesso! Sua inscrição será confirmada após você efetuar o pagamento.'
         });
     }
 

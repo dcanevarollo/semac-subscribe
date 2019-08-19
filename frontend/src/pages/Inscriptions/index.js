@@ -104,7 +104,9 @@ export default function Inscriptions() {
   const [openDialog, setOpenDialog] = useState(false);
   const [cpf, setCPF] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
-  const [showAlert, setShowAlert] = useState(false)
+  const [responseButton, setResponseButton] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   /**
    * Aplica a máscara do campo de CPF.
@@ -123,6 +125,30 @@ export default function Inscriptions() {
       .replace(/(\d{3})(\d{1,2})/, '$1-$2')
       /* Captura 2 números seguidos de um traço e não deixa ser digitado mais nada. */
       .replace(/(-\d{2})\d+?$/, '$1')
+  }
+
+  /**
+   * Define a ação do botão do AlertBox quando clicado. Caso a inscrição tenha sido efetuada com sucesso, o usuário, ao
+   * clicar no botão em questão, será redirecionado para a tela de pagamento do PayPal.
+   */
+  function handleAlertButtonClick() {
+    if (success) {
+      document.getElementById('paypal-form').submit();
+    } else {
+      setShowAlert(false);
+    }
+  }
+
+  /**
+   * Exibe a mensagem de alerta personalizada ao usuário.
+   * 
+   * @param {String} message : mensagem que será exibida. 
+   * @param {String} buttonMessage : texto do botão de confirmação.
+   */
+  function showAlertBox(message, buttonMessage) {
+    setResponseMessage(message);
+    setResponseButton(buttonMessage);
+    setShowAlert(true);
   }
 
   /**
@@ -153,6 +179,8 @@ export default function Inscriptions() {
     } else {
       setOpenDialog(false);
 
+      let buttonMessage = "Voltar";
+
       /* Envia o formulário a API apenas se o usuário selecionou o checkbox de aviso obrigatório. */
       if (readAdvice) {
         const response = await api.post("/inscription", {
@@ -171,19 +199,17 @@ export default function Inscriptions() {
           otherLink: data.others !== undefined ? data.others : ""
         })
 
-        setResponseMessage(response.data.message);
-        setShowAlert(true);
-
-        /* Se obteve sucesso, redireciona para a página de pagamento do PayPal após 1.5s. */
-        if (response.data.message.search("sucesso") !== -1) {
-          setTimeout(() => {
-            selectPayPalValue(data);
-            document.getElementById('paypal-form').submit();
-          }, 1500);
+        /* Se a inscrição foi efetuada, o botão deverá conter a mensagem "Efetuar pagamento" e o tipo de inscrição
+        deverá ser selecionado no formulário do PayPal. */
+        if (response.data.message.search("Sucesso") !== -1) {
+          buttonMessage = "Efetuar pagamento";
+          setSuccess(true);
+          selectPayPalValue(data);
         }
+
+        showAlertBox(response.data.message, buttonMessage, success);
       } else {
-        setResponseMessage("Confirme que você leu o aviso antes de se cadastrar!");
-        setShowAlert(true);
+        showAlertBox("Confirme que você leu o aviso antes de se cadastrar!", buttonMessage, success);
       }
     }
   }
@@ -202,8 +228,8 @@ export default function Inscriptions() {
                 <br/><br/>
                 <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
                 <br/><br/>
-                Após completar seu cadastro, você será redirecionado para a tela de pagamento do 
-                <strong> PayPal</strong>.
+                Após completar seu cadastro, você deverá efetuar o pagamento pelo <strong>PayPal</strong> para confirmar
+                sua inscrição.
               </p>
             </LeftSide>
 
@@ -280,6 +306,7 @@ export default function Inscriptions() {
             </RightSide>
           </RegisterContainer>
 
+          {/* Caixa de preenchimento que aparecerá caso o usuário queira vaga de estágio/emprego. */}
           <Dialog
             open={openDialog}
             onClose={() => setOpenDialog(false)}
@@ -324,12 +351,13 @@ export default function Inscriptions() {
           </Dialog>
         </Form>
 
+        {/* Mensagem que aparecerá após o envio do formulário. */}
         <AlertBox open={showAlert} onClose={() => setShowAlert(false)}>
           <AlertMessageContainer>
             <h1>{responseMessage}</h1>
 
             <ButtonsContainer>
-              <button onClick={() => setShowAlert(false)}>Voltar</button>
+              <button onClick={handleAlertButtonClick}>{responseButton}</button>
             </ButtonsContainer>
           </AlertMessageContainer>
         </AlertBox>

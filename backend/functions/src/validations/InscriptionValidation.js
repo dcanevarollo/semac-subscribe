@@ -36,10 +36,8 @@ module.exports = {
         for (i = 1; i <= 9; i++) {
             sum += parseInt(strCpf.substring(i - 1, i)) * (11 - i);
         }
-        console.log(sum);
 
         rest = (sum * 10) % 11;
-        console.log(rest)
 
         if (rest == 10 || rest == 11) {
             rest = 0;
