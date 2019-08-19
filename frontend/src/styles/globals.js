@@ -18,6 +18,12 @@ const GlobalStyle = createGlobalStyle`
   html, body, #root {
     height: 100%;
   }  
+
+  @media screen and (max-width: 800px) {
+    html, body, #root {
+      width: 100vw;
+    }
+  }
 `;
 
 export default GlobalStyle;
