@@ -9,7 +9,8 @@ import api from '../../services/api'
 
 import Dialog from '@material-ui/core/Dialog';
 import Checkbox from '@material-ui/core/Checkbox';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { Form } from '@rocketseat/unform'
 
@@ -55,6 +56,9 @@ let shareLink = false;
 
 export default function Inscriptions() {
 
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   /**
    * Caixa de alerta dinâmica.
    */
@@ -72,6 +76,9 @@ export default function Inscriptions() {
       },
       '& .MuiDialog-paperWidthSm': {
         borderRadius: 20,
+      },
+      '& .MuiDialog-paperFullScreen': {
+        height: '100%',
       }
     },
   })(Dialog);
@@ -286,6 +293,7 @@ export default function Inscriptions() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             maxWidth="900px"
+            fullScreen={fullScreen}
           >
             <DialogContainer>
               <DialogText>
