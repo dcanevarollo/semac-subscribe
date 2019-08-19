@@ -326,7 +326,7 @@ export default function Inscriptions() {
           </RegisterContainer>
 
           {/* Caixa de preenchimento que aparecerá caso o usuário queira vaga de estágio/emprego. */}
-          <Dialog
+          <AlertBox
             open={openDialog}
             onClose={() => setOpenDialog(false)}
             aria-labelledby="alert-dialog-title"
@@ -363,22 +363,20 @@ export default function Inscriptions() {
                 </AdviceContainer>
               </CheckboxContainer>
 
-              <ButtonsContainer>
-                <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
-                <button type="submit" form="main-form">Confirmar</button>
-              </ButtonsContainer>
             </DialogContainer>
-          </Dialog>
+
+            <ButtonsContainer>
+              <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
+              <button type="submit" form="main-form">Confirmar</button>
+            </ButtonsContainer>
+          </AlertBox>
         </Form>
 
         {/* Mensagem que aparecerá após o envio do formulário. */}
         <AlertBox open={showAlert} onClose={() => setShowAlert(false)}>
           <AlertMessageContainer>
             <h1>{responseMessage}</h1>
-
-            <ButtonsContainer>
-              <button id="alert-button" onClick={handleAlertButtonClick}>{responseButton}</button>
-            </ButtonsContainer>
+            <button id="alert-button" onClick={handleAlertButtonClick}>{responseButton}</button>
           </AlertMessageContainer>
         </AlertBox>
 

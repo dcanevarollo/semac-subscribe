@@ -411,6 +411,9 @@ export const DialogInput = styled(InputStyle)`
 `;
 
 export const ButtonsContainer = styled(FlexBox)`
+  padding-bottom: 64px;
+  background-color: #1C1735;
+
   button {
     margin: 50px 10px 0 10px;
     height: 32px;
@@ -434,6 +437,7 @@ export const ButtonsContainer = styled(FlexBox)`
   }
 
   @media screen and (max-width: 800px) {
+    padding-bottom: 32px;
     display: flex;
     flex-direction: row;
   }
@@ -455,11 +459,26 @@ export const AlertMessageContainer = styled(FlexBox)`
   }
 
   button {
-    margin-top: 20px;
-    padding: 0 16px;
-    font-size: 14px;
-    min-width: 100px;
+    margin: 50px 10px 0 10px;
+    padding: 8px;
+    height: 32px;
     width: auto;
+    background-color: #E20272;
+    border: 0;
+    border-radius: 60px;
+    color:  #FFFF;
+    font-size: 14px;
+    font-weight: 400;
+    transition: 0.3s;
+
+      :hover {
+        background-color: #B8015D;
+        cursor: pointer;
+      }
+
+      :focus {
+        outline:0;
+      }
   }
 
   @media screen and (max-width: 800px) {
