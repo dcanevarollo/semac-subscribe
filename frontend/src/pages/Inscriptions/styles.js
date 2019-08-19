@@ -6,6 +6,7 @@ const FlexBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 100%;
 
   @media screen and (max-width: 800px) {
     width: 100%;
@@ -47,6 +48,7 @@ export const MainContainer = styled(FlexBox)`
 export const RegisterContainer = styled(FlexBox)`
   display: flex;
   margin: 50px 0;
+  padding: 32px;
   justify-content: space-between;
   height: 950px;
   width: 1200px;
@@ -54,15 +56,15 @@ export const RegisterContainer = styled(FlexBox)`
   background-color: #1C1735;
 
   @media screen and (max-width: 800px) {
-    margin: 10px;
+    margin: 0;
+    padding: 16px;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+    border-radius: 0;
     height: 90%;
-    padding: 16px;
-    width: 100%;
-    max-width: 350px;
+    width: auto;
   }
 `;
 
@@ -71,7 +73,7 @@ export const SelectSizes = styled(Select)`
   color: #FFFF;
   font-weight: 400;
   border: 0;
-  padding: 10px;
+  padding: 16px;
   border-radius: 8px;
   font-size: 16px;  
   height: 52px;
@@ -85,8 +87,6 @@ export const SelectSizes = styled(Select)`
   @media screen and (max-width: 800px) {
     flex: 1;
     width: 100%;
-    max-width: 350px;
-    padding: 15px 0 15px 10px;
   }
 `;
 
@@ -148,7 +148,7 @@ export const RightSide = styled(FlexBox)`
 
   @media screen and (max-width: 800px) {
     flex: 1;
-    width: 100%;
+    width: 95%;
 
     h1 {
       width: 100;
@@ -171,6 +171,7 @@ export const SpacedContainer = styled(FlexBox)`
   justify-content: space-between;
 
   @media screen and (max-width: 800px) {
+    padding: 0;
     width: 100%;
     justify-content: center;
   }
@@ -178,6 +179,7 @@ export const SpacedContainer = styled(FlexBox)`
 
 const InputStyle = styled(Input)`
   height: 54px;
+  padding-left: 10px;
   border: 0;
   border-radius: 8px;
   color: #FFFF;
@@ -191,31 +193,18 @@ const InputStyle = styled(Input)`
 
   @media screen and (max-width: 800px) {
     flex: 1;
-    width: 100%;
-    max-width: 350px; 
+    width: 97%;
+    margin: 0;
     padding: 15px 0 15px 10px;
-    margin: 0 auto;
   }
 `;
 
 export const Name = styled(InputStyle)`
   width: 650px;
-  padding-left: 10px;
-
-  @media screen and (max-width: 800px) {
-    width: 350px;
-    padding-left: 0 !important;
-  }
 `;
 
 export const CPF = styled(InputStyle)`
   width: 320px;
-  padding-left: 10px;
-
-  @media screen and (max-width: 800px) {
-    width: 350px;
-    padding-left: 0 !important;
-  }
 `;
 
 export const SwitchContainer = styled(FlexBox)`
@@ -249,11 +238,12 @@ export const InlineSelect = styled(Select)`
   font-weight: 400;
   border: 0;
   padding: 16px;
-  margin: 10 0px;
+  margin: 10px 0;
   border-radius: 8px;
   font-size: 16px;  
   height: 52px;
   background-color: #151128;
+  text-overflow: ellipsis;
 
   :focus {
     outline: none;
@@ -262,23 +252,6 @@ export const InlineSelect = styled(Select)`
   @media screen and (max-width: 800px) {
     flex: 1;
     width: 100%;
-    max-width: 350px;
-  }
-`;
-
-export const MiniCourses = styled(FlexBox)`
-  margin-right: 25px;
-  justify-content: space-between;
-  width: 350px;
-  flex-direction: column;
-
-  @media screen and (max-width: 800px) {
-    width: 100%;
-    max-width: 350px;
-
-    option {
-      overflow: hidden;
-    }
   }
 `;
 
@@ -339,6 +312,12 @@ export const AlertText = styled(FlexBox)`
   div {
     flex-direction: row;
   }
+
+  @media screen and (max-width: 800px) {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 export const CheckboxContainer = styled(FlexBox)`
@@ -351,7 +330,7 @@ export const CheckboxContainer = styled(FlexBox)`
   }
 
   @media screen and (max-width: 800px) {
-    justify-content: flex-start;
+    justify-content: center;
     align-items: start;
     flex-direction: row;
 
@@ -364,12 +343,13 @@ export const CheckboxContainer = styled(FlexBox)`
 export const DialogContainer = styled(FlexBox)`
   height: 600px;
   width: 900px;
+  padding: 16px;
   background-color: #1C1735;
   flex-direction: column;
 
   @media screen and (max-width: 800px) {
-    
     height: 100%;
+    width: auto;
   }
 
 `;
@@ -426,6 +406,7 @@ export const AdviceContainer = styled.div`
 `;
 
 export const DialogInput = styled(InputStyle)`
+  padding-left: 10px;
   width: 500px;
 `;
 
@@ -460,6 +441,9 @@ export const ButtonsContainer = styled(FlexBox)`
 
 export const AlertMessageContainer = styled(FlexBox)`
   flex-direction: column;
+  padding: 16px;
+  justify-content: center;
+  align-items: center;
   width: 500px;
   height: 150px;
   background-color: #151128;
@@ -467,11 +451,24 @@ export const AlertMessageContainer = styled(FlexBox)`
   h1 {
     font-size: 16px;
     color: #FFF;
+    text-align: center;
   }
 
   button {
     margin-top: 20px;
+    padding: 0 16px;
     font-size: 14px;
+    min-width: 100px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 90%;
+    overflow: hidden;
+
+    h1 {
+      width: auto;
+    }
   }
 `;
 

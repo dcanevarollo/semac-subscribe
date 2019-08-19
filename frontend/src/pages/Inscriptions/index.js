@@ -78,7 +78,12 @@ export default function Inscriptions() {
         borderRadius: 20,
       },
       '& .MuiDialog-paperFullScreen': {
-        height: '100%',
+        position: 'absolute',
+        display: 'block',
+        top: '0',
+        right: '0',
+        bottom: '0',
+        left: '0'
       }
     },
   })(Dialog);
@@ -113,6 +118,7 @@ export default function Inscriptions() {
   const [responseMessage, setResponseMessage] = useState("");
   const [responseButton, setResponseButton] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [showLoad, setShowLoad] = useState(false);
   const [success, setSuccess] = useState(false);
 
   /**
@@ -181,15 +187,19 @@ export default function Inscriptions() {
   async function handleSubmit(data) {
     /* Se o dialog de informações extras (GitHub, LinkedIn...) não está aberto e o usuário quer emprego ou vaga de está-
     gio, o dialog em questão deve então ser aberto. */
-    if (!openDialog && wantInternship) {
-      setOpenDialog(true);
-    } else {
-      setOpenDialog(false);
+    let buttonMessage = "Voltar";
 
-      let buttonMessage = "Voltar";
+    if (readAdvice) {
+      if (!openDialog && wantInternship) {
+        setOpenDialog(true);
+      } else {
+        setOpenDialog(false);
 
-      /* Envia o formulário a API apenas se o usuário selecionou o checkbox de aviso obrigatório. */
-      if (readAdvice) {
+        /* Exibe o alerta de carregamento. */
+        setResponseMessage("Aguarde, estamos processando sua solicitação...")
+        setShowLoad(true);
+
+        /* Envia o formulário a API apenas se o usuário selecionou o checkbox de aviso obrigatório. */
         const response = await api.post("/inscription", {
           name: data.name,
           cpf: data.cpf,
@@ -206,6 +216,8 @@ export default function Inscriptions() {
           otherLink: data.others !== undefined ? data.others : ""
         })
 
+        setShowLoad(false);
+
         /* Se a inscrição foi efetuada, o botão deverá conter a mensagem "Efetuar pagamento" e o tipo de inscrição
         deverá ser selecionado no formulário do PayPal. */
         if (response.data.message.search("Sucesso") !== -1) {
@@ -215,9 +227,9 @@ export default function Inscriptions() {
         }
 
         showAlertBox(response.data.message, buttonMessage, success);
-      } else {
-        showAlertBox("Confirme que você leu o aviso antes de se cadastrar!", buttonMessage, success);
       }
+    } else {
+      showAlertBox("Confirme que você leu o aviso antes de se cadastrar!", buttonMessage, success);
     }
   }
 
@@ -231,7 +243,7 @@ export default function Inscriptions() {
 
               <h1>Bem vindo!</h1>
               <p>
-                Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos do formuário.
+                Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos do formulário.
                 <br/><br/>
                 <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
                 <br/><br/>
@@ -242,7 +254,7 @@ export default function Inscriptions() {
 
             <RightSide>
               <h1>Faça seu cadastro e participe do evento!</h1>
-              <h3>É rapidinho, prometo</h3>
+              <h3>É rapidinho, prometo.</h3>
 
               <FormInternal>
                 <InputContainer>
@@ -365,8 +377,15 @@ export default function Inscriptions() {
             <h1>{responseMessage}</h1>
 
             <ButtonsContainer>
-              <button onClick={handleAlertButtonClick}>{responseButton}</button>
+              <button id="alert-button" onClick={handleAlertButtonClick}>{responseButton}</button>
             </ButtonsContainer>
+          </AlertMessageContainer>
+        </AlertBox>
+
+        {/* Mensagem de carregamento exibida no envio do formulário. */}
+        <AlertBox open={showLoad} onClose={() => setShowLoad(false)}>
+          <AlertMessageContainer>
+            <h1>{responseMessage}</h1>
           </AlertMessageContainer>
         </AlertBox>
 
