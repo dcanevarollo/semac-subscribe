@@ -75,6 +75,7 @@ module.exports = {
     validate(inscription) {
         /* Validação de campos em brancos. */
         if (inscription.name == "" 
+            || inscription.email == ""
             || inscription.cpf == "" 
             || inscription.inscriptionType == "" 
             || inscription.tShirtSize == "" 
@@ -85,6 +86,12 @@ module.exports = {
             || inscription.minicourse1 == "" 
             || inscription.minicourse2 == "") {
             return 'Por favor, preencha todos os campos obrigatórios.'        
+        }
+
+        /* Valida o formato do e-mail. */
+        const emailPattern = new RegExp("^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$", "g");
+        if (!emailPattern.test(inscription.email)) {
+            return 'Por favor, forneça um e-mail válido.';
         }
 
         /* Valida o formato do CPF. */

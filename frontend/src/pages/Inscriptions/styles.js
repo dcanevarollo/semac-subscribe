@@ -247,6 +247,8 @@ export const InlineSelect = styled(Select)`
   font-size: 16px;  
   height: 52px;
   background-color: #151128;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 
   :focus {
@@ -415,9 +417,6 @@ export const DialogInput = styled(InputStyle)`
 `;
 
 export const ButtonsContainer = styled(FlexBox)`
-  padding-bottom: 64px;
-  background-color: #1C1735;
-
   button {
     margin: 50px 10px 0 10px;
     height: 32px;
@@ -441,15 +440,15 @@ export const ButtonsContainer = styled(FlexBox)`
   }
 
   @media screen and (max-width: 800px) {
-    padding-bottom: 32px;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
   }
 `;
 
 export const AlertMessageContainer = styled(FlexBox)`
   flex-direction: column;
-  padding: 16px;
+  padding: 16px 24px;
   justify-content: center;
   align-items: center;
   width: 500px;
@@ -464,7 +463,7 @@ export const AlertMessageContainer = styled(FlexBox)`
 
   button {
     margin: 50px 10px 0 10px;
-    padding: 8px;
+    padding: 8px 12px;
     height: 32px;
     width: auto;
     min-width: 100px;

@@ -22,6 +22,7 @@ module.exports = {
         let newInscription = await Inscription.findOne({ cpf: req.body.cpf });
         if (newInscription != null) {
             return res.json({
+                success: false,
                 message: 'CPF já cadastrado.'
             });
         }
@@ -30,6 +31,7 @@ module.exports = {
         const errorMessage = InscriptionValidation.validate(req.body);
         if (errorMessage !== '') {
             return res.json({
+                success: false,
                 message: errorMessage
             });
         }
@@ -41,6 +43,7 @@ module.exports = {
 
         newInscription = Inscription.create({
             name: req.body.name,
+            email: req.body.email,
             cpf: req.body.cpf,
             inscriptionType: req.body.inscriptionType,
             tShirtSize: req.body.tShirtSize,
@@ -56,6 +59,7 @@ module.exports = {
         });
 
         return res.json({
+            success: true,
             message: 'Sucesso! Sua inscrição será confirmada após você efetuar o pagamento.'
         });
     }

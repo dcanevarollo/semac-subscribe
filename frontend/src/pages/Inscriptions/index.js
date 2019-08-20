@@ -81,6 +81,7 @@ export default function Inscriptions() {
       '& .MuiDialog-paperFullScreen': {
         position: 'absolute',
         display: 'block',
+        borderRadius: 0,
         top: '0',
         right: '0',
         bottom: '0',
@@ -105,12 +106,13 @@ export default function Inscriptions() {
 
   const optionsMiniCourse2 = [
     {id: 3, title: "Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani"},
-    {id: 4, title: "..."}
+    {id: 4, title: "Cronograma de Projetos: Cálculo do tempo de um projeto utilizando os diagramas CPM, Rede, AoA e " + 
+      "AoN - Luiz Afonso Peccini"}
   ]
 
   const typeInscriptionsOptions = [
-    {id: "Alunos de TI", title: "Alunos de TI - R$80,00"},
-    {id: "Professores e Servidores", title: "Professor/Servidor da UNESP - R$90,00"},
+    {id: "Aluno de graduação ou técnico de TI", title: "Aluno de graduação ou técnico de TI - R$80,00"},
+    {id: "Professor/Servidor da UNESP", title: "Professor/Servidor da UNESP - R$90,00"},
     {id: "Demais", title: "Demais - R$100,00"},
   ]
 
@@ -171,9 +173,9 @@ export default function Inscriptions() {
    * @param {Object} data : dados retornados do formulário.
    */
   function selectPayPalValue(data) {
-    if (data.inscriptionType === "Alunos de TI") {
+    if (data.inscriptionType === "Aluno de graduação ou técnico de TI") {
       document.getElementById('opt-ti-student').selected = true;
-    } else if (data.inscriptionType === "Professores e Servidores") {
+    } else if (data.inscriptionType === "Professor/Servidor da UNESP") {
       document.getElementById('opt-professors-servers').selected = true;
     } else {
       document.getElementById('opt-others').selected = true;
@@ -220,9 +222,11 @@ export default function Inscriptions() {
 
         setShowLoad(false);
 
+        console.log(response.data.success);
+
         /* Se a inscrição foi efetuada, o botão deverá conter a mensagem "Efetuar pagamento" e o tipo de inscrição
         deverá ser selecionado no formulário do PayPal. */
-        if (response.data.message.search("Sucesso") !== -1) {
+        if (response.data.success) {
           buttonMessage = "Efetuar pagamento";
           setSuccess(true);
           selectPayPalValue(data);
@@ -370,12 +374,11 @@ export default function Inscriptions() {
                 </AdviceContainer>
               </CheckboxContainer>
 
+              <ButtonsContainer>
+                <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
+                <button type="submit" form="main-form">Confirmar</button>
+              </ButtonsContainer>
             </DialogContainer>
-
-            <ButtonsContainer>
-              <button type="button" onClick={() => setOpenDialog(false)}>Cancelar</button>
-              <button type="submit" form="main-form">Confirmar</button>
-            </ButtonsContainer>
           </AlertBox>
         </Form>
 
