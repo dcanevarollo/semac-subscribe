@@ -24,6 +24,7 @@ import {
   FormInternal,
   SpacedContainer,
   Name,
+  Email,
   SelectSizes,
   CheckBoxes,
   CPF,
@@ -202,6 +203,7 @@ export default function Inscriptions() {
         /* Envia o formulário a API apenas se o usuário selecionou o checkbox de aviso obrigatório. */
         const response = await api.post("/inscription", {
           name: data.name,
+          email: data.email,
           cpf: data.cpf,
           inscriptionType: data.inscriptionType,
           tShirtSize: data.tShirtSize,
@@ -260,6 +262,11 @@ export default function Inscriptions() {
                 <InputContainer>
                   <label>Nome</label>
                   <Name name="name"/>
+                </InputContainer>
+
+                <InputContainer>
+                  <label>E-mail</label>
+                  <Email name="email"/>
                 </InputContainer>
 
                 <SpacedContainer>

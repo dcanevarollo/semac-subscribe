@@ -50,7 +50,7 @@ export const RegisterContainer = styled(FlexBox)`
   margin: 50px 0;
   padding: 32px;
   justify-content: space-between;
-  height: 950px;
+  height: 1100px;
   width: 1200px;
   border-radius: 20px;
   background-color: #1C1735;
@@ -200,6 +200,10 @@ const InputStyle = styled(Input)`
 `;
 
 export const Name = styled(InputStyle)`
+  width: 650px;
+`;
+
+export const Email = styled(InputStyle)`
   width: 650px;
 `;
 
@@ -463,6 +467,7 @@ export const AlertMessageContainer = styled(FlexBox)`
     padding: 8px;
     height: 32px;
     width: auto;
+    min-width: 100px;
     background-color: #E20272;
     border: 0;
     border-radius: 60px;
