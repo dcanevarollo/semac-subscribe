@@ -44,11 +44,11 @@ const InscriptionSchema = new Schema({
     },
     minicourse1: {
         type: Schema.Types.ObjectId,
-        ref: 'Minicourse'
+        ref: 'Minicourse',
     },
     minicourse2: {
         type: Schema.Types.ObjectId,
-        ref: 'Minicourse'
+        ref: 'Minicourse',
     },
     /* Campos opcionais, apenas preenchidos caso o usuário opte pelo estágio/vaga de emprego. */
     github: String,

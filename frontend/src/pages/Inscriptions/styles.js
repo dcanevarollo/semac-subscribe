@@ -281,7 +281,7 @@ export const InputContainer = styled(FlexBox)`
   align-items: flex-start;
   margin: 10px 0;
 
-  label::after {
+  label[class="required"]::after {
     content: "*";
     margin-left: 4px;
     color: #E20272;

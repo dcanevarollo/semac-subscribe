@@ -13,6 +13,10 @@ const MinicourseSchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    vacancies: {
+        type: Number,
+        required: true
     }
 }, {
     collection: 'minicourses'

@@ -100,13 +100,15 @@ export default function Inscriptions() {
   ]
   
   const optionsMiniCourse1 = [
+    {id: 0, title: "Nenhuma das opções"},
     {id: 1, title: "Desenvolvimento de APIs Utilizando SpringBoot - Luiz Roberto Freitas"},
     {id: 2, title: "Análise de Sinais de Áudio Musical - Thiago Fernandes Tavares"}
   ]
 
   const optionsMiniCourse2 = [
-    {id: 3, title: "Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani"},
-    {id: 4, title: "Cronograma de Projetos: Cálculo do tempo de um projeto utilizando os diagramas CPM, Rede, AoA e " + 
+    {id: 0, title: "Nenhuma das opções"},
+    {id: 4, title: "Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani"},
+    {id: 5, title: "Cronograma de Projetos: Cálculo do tempo de um projeto utilizando os diagramas CPM, Rede, AoA e " + 
       "AoN - Luiz Afonso Peccini"}
   ]
 
@@ -213,8 +215,8 @@ export default function Inscriptions() {
           wantMarathon: wantMarathon,
           wantGameChampionship: wantGameChampionship,
           shareLink: shareLink,
-          minicourse1: data.miniCourse1,
-          minicourse2: data.miniCourse2,
+          minicourse1: data.miniCourse1 !== undefined ? data.miniCourse1 : "",
+          minicourse2: data.miniCourse2 !== undefined ? data.miniCourse2 : "",
           github: data.github !== undefined ? data.github : "",
           linkedin: data.linkedin !== undefined ? data.linkedin : "",
           otherLink: data.others !== undefined ? data.others : ""
@@ -264,23 +266,23 @@ export default function Inscriptions() {
 
               <FormInternal>
                 <InputContainer>
-                  <label>Nome</label>
+                  <label className="required">Nome</label>
                   <Name name="name"/>
                 </InputContainer>
 
                 <InputContainer>
-                  <label>E-mail</label>
+                  <label className="required">E-mail</label>
                   <Email name="email"/>
                 </InputContainer>
 
                 <SpacedContainer>
                   <InputContainer>
-                    <label>Tamanho de camiseta</label>
+                    <label className="required">Tamanho de camiseta</label>
                     <SelectSizes name="tShirtSize" options={optionsSizes} />
                   </InputContainer>
 
                   <InputContainer>
-                    <label>CPF</label>
+                    <label className="required">CPF</label>
                     <CPF name="cpf" onChange={e => {setCPF(maskCpf(e.target.value))}} value={cpf}/>
                   </InputContainer>
                 </SpacedContainer>
@@ -296,7 +298,7 @@ export default function Inscriptions() {
                 </InputContainer>
 
                 <InputContainer>
-                  <label>Tipo de inscrição</label>
+                  <label className="required">Tipo de inscrição</label>
                   <InlineSelect name="inscriptionType" options={typeInscriptionsOptions} />                  
                 </InputContainer>
 

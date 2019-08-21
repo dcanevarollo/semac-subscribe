@@ -26,9 +26,14 @@ module.exports = {
                 message: 'CPF já cadastrado.'
             });
         }
+        
+        /* Busca os minicursos pelos códigos recebidos e salva seus _ids. */
+        const minicourse1 = await Minicourse.findOne({ code: req.body.minicourse1 });
+        
+        const minicourse2 = await Minicourse.findOne({ code: req.body.minicourse2 });
 
         /* Faz a validação do formulário e retorna um JSON de erro, se houver. */
-        const errorMessage = InscriptionValidation.validate(req.body);
+        const errorMessage = InscriptionValidation.validate(req.body, minicourse1, minicourse2);
         if (errorMessage !== '') {
             return res.json({
                 success: false,
@@ -36,32 +41,47 @@ module.exports = {
             });
         }
 
-        /* Busca os minicursos pelos códigos recebidos e salva seus _ids. */
-        const minicourse1 = await Minicourse.findOne({ code: req.body.minicourse1 });
+        try {
+            newInscription = await Inscription.create({
+                name: req.body.name,
+                email: req.body.email,
+                cpf: req.body.cpf,
+                inscriptionType: req.body.inscriptionType,
+                tShirtSize: req.body.tShirtSize,
+                wantInternship: req.body.wantInternship,
+                wantMarathon: req.body.wantMarathon,
+                wantGameChampionship: req.body.wantGameChampionship,
+                shareLink: req.body.shareLink,
+                minicourse1: minicourse1,
+                minicourse2: minicourse2,
+                github: req.body.github,
+                linkedin: req.body.linkedin,
+                otherLink: req.body.otherLink
+            });
 
-        const minicourse2 = await Minicourse.findOne({ code: req.body.minicourse2 });
+            /* Atualiza as vagas (decrementa-as). */
+            if (minicourse1 !== null) {
+                minicourse1.vacancies--;
+                minicourse1.save();
+            }
+            
+            if (minicourse2 !== null) {
+                minicourse2.vacancies--;
+                minicourse2.save();
+            }
+    
+            return res.json({
+                success: true,
+                message: 'Sucesso! Sua inscrição será confirmada após você efetuar o pagamento.'
+            });
+        } catch (error) {
+            console.log(error);
 
-        newInscription = Inscription.create({
-            name: req.body.name,
-            email: req.body.email,
-            cpf: req.body.cpf,
-            inscriptionType: req.body.inscriptionType,
-            tShirtSize: req.body.tShirtSize,
-            wantInternship: req.body.wantInternship,
-            wantMarathon: req.body.wantMarathon,
-            wantGameChampionship: req.body.wantGameChampionship,
-            shareLink: req.body.shareLink,
-            minicourse1: minicourse1,
-            minicourse2: minicourse2,
-            github: req.body.github,
-            linkedin: req.body.linkedin,
-            otherLink: req.body.otherLink
-        });
-
-        return res.json({
-            success: true,
-            message: 'Sucesso! Sua inscrição será confirmada após você efetuar o pagamento.'
-        });
+            return res.json({
+                success: false,
+                message: 'Erro interno. Tente novamente ou contate um administrador do sistema.'
+            });
+        }
     }
 
 };

@@ -72,7 +72,7 @@ module.exports = {
      * @param {Object} inscription : conterá o corpo da requisição enviada pelo cliente.
      * @returns {String} mensagem de erro, se houver.
      */
-    validate(inscription) {
+    validate(inscription, minicourse1, minicourse2) {
         /* Validação de campos em brancos. */
         if (inscription.name == "" 
             || inscription.email == ""
@@ -82,10 +82,17 @@ module.exports = {
             || inscription.wantInternship == null 
             || inscription.wantMarathon == null 
             || inscription.wantGameChampionship == null
-            || inscription.shareLink == null 
-            || inscription.minicourse1 == "" 
-            || inscription.minicourse2 == "") {
+            || inscription.shareLink == null) {
             return 'Por favor, preencha todos os campos obrigatórios.'        
+        }
+
+        /* Verifica se há vagas disponíveis nos minicursos escolhidos. */
+        if (minicourse1 !== null && minicourse1.vacancies <= 0) {
+            return `O minicurso ${minicourse1.name} está com as vagas esgotadas.`;
+        }
+        
+        if (minicourse2 !== null && minicourse2.vacancies <= 0) {
+            return `O minicurso ${minicourse2.name} está com as vagas esgotadas.`;
         }
 
         /* Valida o formato do e-mail. */
