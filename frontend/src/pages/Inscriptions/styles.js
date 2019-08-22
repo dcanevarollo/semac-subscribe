@@ -111,6 +111,27 @@ export const LeftSide = styled(FlexBox)`
     color: #E20272;
   }
 
+  .already-registered {
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+  }
+
+  .already-registered button {
+    font-size: 14px;
+    margin: 16px;
+    padding: 8px 16px;
+    height: auto;
+    width: fit-content;
+    background: transparent;
+    border: 2px solid #E20272;
+    transition: .3s;
+  }
+
+  .already-registered button:hover {
+    background: #E20272;
+  }
+
   @media screen and (max-width: 800px) {
     width: 100%;
     margin: 0;
@@ -261,11 +282,6 @@ export const InlineSelect = styled(Select)`
   }
 `;
 
-export const Line = styled(FlexBox)`
-  width: 100%;
-  justify-content: space-between;
-`;
-
 export const Options = styled(FlexBox)`
   padding: 0 10px 0 10px;
   width: 100%;
@@ -387,6 +403,37 @@ export const DialogInputContainer = styled(FlexBox)`
   label {
     margin: 0 0 5px 10px;
     color: rgba(255, 255, 255, 0.5);
+  }
+
+  label[class="required"]::after {
+    content: "*";
+    margin-left: 4px;
+    color: #E20272;
+  }
+
+  input {
+    height: 54px;
+    width: 500px;
+    padding-left: 10px;
+    border: 0;
+    border-radius: 8px;
+    color: #FFFF;
+    font-weight: 400;
+    font-size: 16px;
+    background-color: #151128;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  @media screen and (max-width: 800px) {
+    input {
+      flex: 1;
+      width: 97%;
+      margin: 0;
+      padding: 15px 0 15px 10px;
+    }
   }
 
   @media screen and (max-width: 800px) {

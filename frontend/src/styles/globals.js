@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased
     padding: 0;
     margin: 0;
   }

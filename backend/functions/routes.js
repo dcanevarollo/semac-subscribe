@@ -14,4 +14,9 @@ const routes = express.Router();
  */
 routes.post('/inscription', InscriptionController.store);
 
+/**
+ * Rota para a requisição GET da inscrição (se já foi efetuada).
+ */
+routes.get('/inscription/:email', InscriptionController.show);
+
 module.exports = routes;

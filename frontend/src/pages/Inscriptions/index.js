@@ -41,7 +41,7 @@ import {
   DialogText,
   ButtonsContainer,
   AlertMessageContainer,
-  PayPalSection
+  PayPalSection,
 } from './styles' 
 
 import Switch from '@material-ui/core/Switch';
@@ -125,6 +125,7 @@ export default function Inscriptions() {
   const [showAlert, setShowAlert] = useState(false);
   const [showLoad, setShowLoad] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
   /**
    * Aplica a máscara do campo de CPF.
@@ -185,6 +186,37 @@ export default function Inscriptions() {
   }
 
   /**
+   * Pesquisa a inscrição do usuário pelo seu e-mail. A API retornará, além da confirmação da inscrição, o tipo da mes-
+   * ma para que o link de redirecionamente do PayPal possa ser submetido.
+   * 
+   * @param {Object} data : formulário de pesquisa (conterá apenas o e-mail digitado). 
+   */
+  async function handleSearch(data) {
+    setAlreadyRegistered(false);
+
+    /* Exibe o alerta de carregamento. */
+    setResponseMessage("Aguarde, estamos processando sua solicitação...")
+    setShowLoad(true);
+
+    const response = await api.get(`/inscription/${data.email}`);
+
+    setShowLoad(false);
+
+    let buttonMessage = "Voltar";
+    if (response.data.registered) {
+      buttonMessage = "Efetuar pagamento";
+      setSuccess(true);
+      selectPayPalValue(response.data);
+    }
+
+    showAlertBox(
+      response.data.registered ? "Encontramos sua inscrição! Clique no botão abaixo para efetuar o pagamento." : 
+        "Infelizmente, não conseguimos encontrar nenhuma inscrição com esse e-mail.", 
+      buttonMessage, 
+      success);
+  }
+
+  /**
    * Cuida da lógica responsável pelo evento de submit do formulário de cadastro.
    * 
    * @param {Object} data : dados retornados do formulário. 
@@ -224,8 +256,6 @@ export default function Inscriptions() {
 
         setShowLoad(false);
 
-        console.log(response.data.success);
-
         /* Se a inscrição foi efetuada, o botão deverá conter a mensagem "Efetuar pagamento" e o tipo de inscrição
         deverá ser selecionado no formulário do PayPal. */
         if (response.data.success) {
@@ -250,14 +280,33 @@ export default function Inscriptions() {
               <Rocket src={rocket} />
 
               <h1>Bem vindo!</h1>
+
               <p>
                 Agradecemos o interesse pelo evento. Para realizar sua inscrição, preencha os campos do formulário.
-                <br/><br/>
+              </p>
+
+              <br/>
+
+              <p>
                 <strong>Atenção!</strong> Campos com <span>*</span> são obrigatórios.
-                <br/><br/>
+              </p>
+
+              <br/>
+
+              <p>
                 Após completar seu cadastro, você deverá efetuar o pagamento pelo <strong>PayPal</strong> para confirmar
                 sua inscrição.
               </p>
+
+              <br/>
+
+              <div className="already-registered">
+                Já se cadastrou e não pagou?
+
+                <button type="button" onClick={() => setAlreadyRegistered(true)}>
+                  Clique aqui!
+                </button>
+              </div>
             </LeftSide>
 
             <RightSide>
@@ -397,6 +446,34 @@ export default function Inscriptions() {
           <AlertMessageContainer>
             <h1>{responseMessage}</h1>
           </AlertMessageContainer>
+        </AlertBox>
+
+        {/* Dialog contendo o input do CPF para pesquisar o cadastro do usuário. */}
+        <AlertBox 
+          open={alreadyRegistered} 
+          onClose={() => setAlreadyRegistered(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="900px"
+          fullScreen={fullScreen}
+        >
+          <DialogContainer>
+            <DialogText>
+              <p>Precisamos do seu e-mail para consultarmos sua inscrição.</p>
+            </DialogText>
+
+            <Form onSubmit={handleSearch}>
+              <DialogInputContainer>
+                <label className="required">E-mail</label>
+                <DialogInput name="email" />
+              </DialogInputContainer>
+
+              <ButtonsContainer>
+                <button type="button" onClick={() => setAlreadyRegistered(false)}>Cancelar</button>
+                <button type="submit">Confirmar</button>
+              </ButtonsContainer>
+            </Form>
+          </DialogContainer>
         </AlertBox>
 
         {/* Formulário escondido que o PayPal utiliza para redirecionamento. */}

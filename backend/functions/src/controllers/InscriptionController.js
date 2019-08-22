@@ -11,6 +11,28 @@ const InscriptionValidation = require('../validations/InscriptionValidation');
 module.exports = {
 
     /**
+     * Verifica se o cadastro de determinado usuário já foi feito.
+     * 
+     * @param req : requisição HTTP recebida. O CPF de consulta estará na url. 
+     * @param res : resposta HTTP que o servidor enviará ao emissor da requisição.
+     * @returns {JSON} status e confirmação (se o cadastro já foi feito).
+     */
+    async show(req, res) {
+        const { email } = req.params;
+
+        const inscription = await Inscription.findOne({ email });
+
+        if (inscription !== null) {
+            return res.json({
+                registered: true,
+                inscriptionType: inscription.inscriptionType
+            });
+        }
+
+        return res.json({ registered: false });
+    },
+
+    /**
      * Efetua o registro de uma inscrição.
      * 
      * @param req : requisição HTTP recebida. Seu corpo conterá os dados da inscrição.
@@ -19,11 +41,17 @@ module.exports = {
      */
     async store(req, res) {
         /* Se a inscrição já foi feita, retorna uma mensagem. */
-        let newInscription = await Inscription.findOne({ cpf: req.body.cpf });
-        if (newInscription != null) {
+        if (await Inscription.exists({ cpf: req.body.cpf })) {
             return res.json({
                 success: false,
                 message: 'CPF já cadastrado.'
+            });
+        }
+
+        if (await Inscription.exists({ email: req.body.email })) {
+            return res.json({
+                success: false,
+                message: 'E-mail já cadastrado.'
             });
         }
         
