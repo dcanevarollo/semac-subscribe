@@ -107,8 +107,8 @@ export default function Inscriptions() {
 
   const optionsMiniCourse2 = [
     {id: 0, title: "Nenhuma das opções"},
-    {id: 4, title: "Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani"},
-    {id: 5, title: "Cronograma de Projetos: Cálculo do tempo de um projeto utilizando os diagramas CPM, Rede, AoA e " + 
+    {id: 3, title: "Introdução ao Processamento de Linguagem Natural com Python - Henrique Dezani"},
+    {id: 4, title: "Cronograma de Projetos: Cálculo do tempo de um projeto utilizando os diagramas CPM, Rede, AoA e " + 
       "AoN - Luiz Afonso Peccini"}
   ]
 
