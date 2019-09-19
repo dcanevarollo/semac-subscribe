@@ -113,9 +113,9 @@ export default function Inscriptions() {
   ]
 
   const typeInscriptionsOptions = [
-    {id: "Aluno de graduação ou técnico de TI", title: "Aluno de graduação ou técnico de TI - R$80,00"},
-    {id: "Professor/Servidor da UNESP", title: "Professor/Servidor da UNESP - R$90,00"},
-    {id: "Demais", title: "Demais - R$100,00"},
+    {id: "Aluno de graduação ou técnico de TI", title: "Aluno de graduação ou técnico de TI - R$90,00"},
+    {id: "Professor/Servidor da UNESP", title: "Professor/Servidor da UNESP - R$100,00"},
+    {id: "Demais", title: "Demais - R$110,00"},
   ]
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -480,12 +480,12 @@ export default function Inscriptions() {
         <PayPalSection>
           <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="POST" target="_top">
             <input type="hidden" name="cmd" value="_s-xclick" />
-            <input type="hidden" name="hosted_button_id" value="4BP4AQDNW68Z6" />
+            <input type="hidden" name="hosted_button_id" value="C86XSWRAVW5EA" />
 
             <table>
               <tbody>
                 <tr>
-                  <td><input type="hidden" name="on0" value="SEMAC 2019" /></td>
+                  <td><input type="hidden" name="on0" value="Inscrição SEMAC 2019 - 2º lote" /></td>
                 </tr>
                 
                 <tr>
