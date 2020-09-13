@@ -6,7 +6,7 @@
 import firebase from 'firebase/app';
 
 const config = {
-    apiKey: "AIzaSyAw-hO59Ab1u2Ne_GIulUnCbdLb2ymz23g",
+    apiKey: "chave",
     authDomain: "semac-inscriptions.firebaseapp.com",
     databaseURL: "https://semac-inscriptions.firebaseio.com",
     projectId: "semac-inscriptions",
