@@ -21,22 +21,20 @@
 import Route from '@ioc:Adonis/Core/Route';
 
 Route.post('auth/login', 'AuthController.login');
+Route.post('subscriptions', 'SubscriptionsController.store');
 Route.get('categories', 'CategoriesController.index');
 Route.get('minicourses', 'MinicoursesController.index');
 
 Route.group(() => {
   Route.delete('auth/logout', 'AuthController.logout');
-  Route.resource('subscriptions', 'SubscriptionsController').only([
-    'store',
-    'show',
-  ]);
+  Route.get('subscriptions/:id', 'SubscriptionsController.show');
 }).middleware(['auth']);
 
 Route.group(() => {
   Route.resource('users', 'UsersController').apiOnly();
   Route.resource('subscriptions', 'SubscriptionsController')
     .apiOnly()
-    .except(['store', 'show']);
+    .except(['store', 'show', 'update']);
   Route.resource('categories', 'CategoriesController')
     .apiOnly()
     .except(['index']);

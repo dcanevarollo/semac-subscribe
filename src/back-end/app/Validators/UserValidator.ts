@@ -16,7 +16,6 @@ export default class UserValidator {
 
   public messages = {
     required: 'O campo {{ field }} é obrigatório.',
-    unique: 'O {{ field }} já foi cadastrado.',
     'email.email': 'Forneça um e-mail válido.',
     'password.minLength': 'A senha deve conter, no mínimo, 4 caracteres',
     'cpf.regex': 'Forneça um CPF válido.',
