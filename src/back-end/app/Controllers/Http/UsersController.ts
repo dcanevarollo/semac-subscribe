@@ -12,9 +12,9 @@ export default class UsersController {
   public async store({ request, response }: HttpContextContract) {
     const data = await request.validate(UserValidator);
 
-    await User.create({ ...data, isAdmin: true });
+    const user = await User.create({ ...data, isAdmin: true });
 
-    return response.created(null);
+    return response.created(user);
   }
 
   public async show({ params, response }: HttpContextContract) {
@@ -39,7 +39,7 @@ export default class UsersController {
     user.merge(data);
     await user.save();
 
-    return response.ok(null);
+    return response.ok(user);
   }
 
   public async destroy({ params, response }: HttpContextContract) {
