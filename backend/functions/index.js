@@ -22,7 +22,7 @@ const httpServer = express();
 /**
  * Interface de conexão com o banco de dados Mongo.
  */
-mongoose.connect('mongodb://dcanevarollo:j672fb3i@semaccluster-shard-00-00-iy3lh.mongodb.net:27017,semaccluster-shard' +
+mongoose.connect('mongodb://<username>:<password>@semaccluster-shard-00-00-iy3lh.mongodb.net:27017,semaccluster-shard' +
     '-00-01-iy3lh.mongodb.net:27017,semaccluster-shard-00-02-iy3lh.mongodb.net:27017/semac-inscriptions?ssl=true&' + 
     'replicaSet=SemacCluster-shard-0&authSource=admin&retryWrites=true&w=majority', {
     useNewUrlParser: true
