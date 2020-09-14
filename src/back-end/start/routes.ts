@@ -20,6 +20,27 @@
 
 import Route from '@ioc:Adonis/Core/Route';
 
-Route.get('/', async () => {
-  return { hello: 'world' };
-});
+Route.post('auth/login', 'AuthController.login');
+Route.get('categories', 'CategoriesController.index');
+Route.get('minicourses', 'MinicoursesController.index');
+
+Route.group(() => {
+  Route.delete('auth/logout', 'AuthController.logout');
+  Route.resource('subscriptions', 'SubscriptionsController').only([
+    'store',
+    'show',
+  ]);
+}).middleware(['auth']);
+
+Route.group(() => {
+  Route.resource('users', 'UsersController').apiOnly();
+  Route.resource('subscriptions', 'SubscriptionsController')
+    .apiOnly()
+    .except(['store', 'show']);
+  Route.resource('categories', 'CategoriesController')
+    .apiOnly()
+    .except(['index']);
+  Route.resource('minicourses', 'MinicoursesController')
+    .apiOnly()
+    .except(['index']);
+}).middleware(['auth', 'admin']);

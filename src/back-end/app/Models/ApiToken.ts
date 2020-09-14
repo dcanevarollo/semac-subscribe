@@ -1,16 +1,16 @@
 import { DateTime } from 'luxon';
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm';
-import Subscription from './Subscription';
+import User from './User';
 
 export default class ApiToken extends BaseModel {
   @column({ isPrimary: true })
   public id: string;
 
   @column({ serializeAs: null })
-  public subscriptionId: string;
+  public userId: string;
 
-  @belongsTo(() => Subscription)
-  public subscription: BelongsTo<typeof Subscription>;
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>;
 
   @column()
   public name: string;

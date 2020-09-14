@@ -7,9 +7,9 @@ export default class ApiTokens extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary().defaultTo(this.raw('uuid_generate_v4()'));
       table
-        .uuid('subscription_id')
+        .uuid('user_id')
         .references('id')
-        .inTable('subscriptions')
+        .inTable('users')
         .onDelete('cascade');
       table.string('name').notNullable();
       table.string('type').notNullable();

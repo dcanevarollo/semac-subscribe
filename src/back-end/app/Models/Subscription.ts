@@ -1,45 +1,32 @@
 import { DateTime } from 'luxon';
-import Hash from '@ioc:Adonis/Core/Hash';
 import {
   column,
-  beforeSave,
   BaseModel,
   computed,
-  hasMany,
-  HasMany,
   belongsTo,
   BelongsTo,
   manyToMany,
   ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm';
-import ApiToken from './ApiToken';
 import Category from './Category';
 import Minicourse from './Minicourse';
+import User from './User';
 
 export default class Subscription extends BaseModel {
   @column({ isPrimary: true })
   public id: string;
 
   @column({ serializeAs: null })
+  public userId: string;
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>;
+
+  @column({ serializeAs: null })
   public categoryId: string;
 
   @belongsTo(() => Category)
   public category: BelongsTo<typeof Category>;
-
-  @column()
-  public name: string;
-
-  @column()
-  public email: string;
-
-  @column()
-  public password: string;
-
-  @column()
-  public rememberMeToken?: string;
-
-  @column()
-  public cpf: string;
 
   @column()
   public github?: string;
@@ -72,15 +59,6 @@ export default class Subscription extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   public updatedAt: DateTime;
-
-  @beforeSave()
-  public static async hashPassword(subscription: Subscription) {
-    if (subscription.$dirty.password)
-      subscription.password = await Hash.make(subscription.password);
-  }
-
-  @hasMany(() => ApiToken)
-  public tokens: HasMany<typeof ApiToken>;
 
   @manyToMany(() => Minicourse)
   public minicourses: ManyToMany<typeof Minicourse>;

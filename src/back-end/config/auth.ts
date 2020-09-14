@@ -5,8 +5,8 @@
  * file.
  */
 
-import Subscription from 'App/Models/Subscription';
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth';
+import User from 'App/Models/User';
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ const authConfig: AuthConfig = {
         | of the mentioned columns to find their user record.
         |
         */
-        uids: ['email', 'cpf'],
+        uids: ['cpf'],
 
         /*
         |--------------------------------------------------------------------------
@@ -91,7 +91,7 @@ const authConfig: AuthConfig = {
         | The model to use for fetching or finding users
         |
         */
-        model: Subscription,
+        model: User,
       },
     },
   },
