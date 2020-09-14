@@ -33,7 +33,7 @@ export default class Subscription extends BaseModel {
 
   @computed({ serializeAs: 'github_link' })
   public get githubLink() {
-    if (!this.github) return null;
+    if (!this.github) return;
 
     return `https://github.com/${this.github}`;
   }
@@ -43,7 +43,7 @@ export default class Subscription extends BaseModel {
 
   @computed({ serializeAs: 'linkedin_link' })
   public get linkedinLink() {
-    if (!this.linkedin) return null;
+    if (!this.linkedin) return;
 
     return `https://www.linkedin.com/in/${this.linkedin}`;
   }

@@ -9,8 +9,6 @@ export default class Login {
   ) {}
 
   async execute() {
-    const token = await this.auth.attempt(this.cpf, this.password);
-
     const user = await User.findBy('cpf', this.cpf);
 
     await user
@@ -18,6 +16,8 @@ export default class Login {
       .query()
       .where('type', 'opaque_token')
       .delete();
+
+    const token = await this.auth.attempt(this.cpf, this.password);
 
     await user?.preload('subscription', (query) => {
       query.select('id');

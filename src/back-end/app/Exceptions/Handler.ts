@@ -28,23 +28,23 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     switch (error.status) {
       case 400: {
         if (error.code === 'E_INVALID_AUTH_PASSWORD') {
-          message = 'Invalid credentials. Try again!';
+          message = 'Credenciais inválidas. Tente novamente!';
 
           return ctx.response.status(400).json({ message });
-        } else message = 'Fill in error.';
+        } else message = 'Verifique os dados preenchidos.';
 
         break;
       }
       case 401: {
-        message = 'You must be logged in to access this resource.';
+        message = 'Você deve estar logado para acessar esse recurso.';
         break;
       }
       case 403: {
-        message = error.message || 'You do not have access to this resource.';
+        message = error.message || 'Você não tem acesso a esse recurso.';
         break;
       }
       case 404: {
-        message = error.message || 'Resource not found.';
+        message = error.message || 'Recurso não encontrado.';
         break;
       }
       case 422: {
@@ -59,7 +59,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
         break;
       }
       default:
-        message = 'Internal error. Please, contact an admin.';
+        message = 'Erro interno. Por favor, contate um administrador.';
         break;
     }
 

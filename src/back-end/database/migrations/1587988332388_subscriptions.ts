@@ -17,7 +17,7 @@ export default class SubscriptionsSchema extends BaseSchema {
         .references('id')
         .inTable('categories')
         .onUpdate('cascade')
-        .onDelete('cascade');
+        .onDelete('set null');
       table.string('github', 100);
       table.string('linkedin', 100);
       table.string('other_link');
